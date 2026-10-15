@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class 1 Pre-Read: Meet Python</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #faf6ef; --card: #fffdf9; --text: #2e2820; --muted: #6e6455;
+    --accent: #b4532a; --accent-soft: #f8ebe0; --border: #e8dfd0;
+    --code-bg: #f4eee2; --code-text: #2e2820;
+    --ok: #2f7a47; --ok-soft: #e8f2e3; --warn: #94590a; --warn-soft: #fbeed0;
+    --bad: #b3261e; --bad-soft: #fbe6e1; --shadow: 0 1px 3px rgba(80,55,20,.10);
+  }
+  
+    * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 118px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; font-size: 17px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 80px; }
+  header.hero { padding: 38px 0 18px; }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: 34px; line-height: 1.2; margin: 6px 0 10px; }
+  .lead { color: var(--muted); font-size: 18px; margin: 0 0 12px; }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .pill { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--bg);
+    border-bottom: 1px solid var(--border); padding: 8px 0 8px;
+  }
+  .topbar .wrap { padding-bottom: 0; }
+  .progress { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+  .progress > div { height: 100%; width: 0; background: var(--ok); transition: width .3s ease; }
+  nav { display: flex; gap: 6px; flex-wrap: wrap; font-size: 14px; }
+  nav a {
+    text-decoration: none; color: var(--muted); padding: 3px 10px; border-radius: 99px;
+    border: 1px solid var(--border); background: var(--card);
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.done { color: var(--ok); border-color: var(--ok); }
+  .pct { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; margin: 22px 0; box-shadow: var(--shadow);
+  }
+  section.card h2 { font-size: 25px; margin: 0 0 4px; line-height: 1.25; }
+  .num { color: var(--accent); }
+  h3 { font-size: 19px; margin: 26px 0 6px; }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 14px 0; border-left: 5px solid; }
+  .callout.tip { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .callout.ok { background: var(--ok-soft); border-color: var(--ok); }
+  .callout strong.t { display: block; margin-bottom: 2px; }
+
+  code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+  .codeblock { position: relative; margin: 12px 0; }
+  .codeblock pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 15px; line-height: 1.5;
+  }
+  .codeblock .label { font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  .copy {
+    position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 3px 9px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer;
+  }
+  .copy:hover { color: var(--accent); border-color: var(--accent); }
+  .placeholder {
+    background: var(--warn-soft); color: var(--warn); border: 1px dashed var(--warn);
+    padding: 0 6px; border-radius: 5px; font-weight: 600; white-space: nowrap;
+  }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); color: var(--accent); }
+  .tablewrap { overflow-x: auto; }
+
+  /* tabs */
+  .tabs { margin: 14px 0; }
+  .tablist { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tablist button {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 16px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  }
+  .tablist button[aria-selected="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+  .steps { counter-reset: s; list-style: none; padding-left: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 38px; margin: 10px 0; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; display: grid; place-items: center;
+  }
+  
+
+  /* diagrams */
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 14px 0; }
+  .flow .box {
+    flex: 1 1 150px; border: 2px solid var(--accent); border-radius: 12px; padding: 10px 12px; background: var(--accent-soft);
+  }
+  .flow .box b { display: block; color: var(--accent); font-size: 18px; }
+  .flow .arrow { align-self: center; font-size: 22px; color: var(--accent); }
+
+  .anatomy { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .anatomy span { padding: 6px 10px; border-radius: 8px; font-size: 15px; }
+  .a-prompt { background: #3b4a6b; color: #fff; }
+  .a-cmd { background: #1f7a3a; color: #fff; }
+  .a-out { background: var(--code-bg); border: 1px solid var(--border); color: var(--code-text); }
+  .legend { font-size: 14px; color: var(--muted); }
+
+  /* terminal & repl */
+  .term {
+    background: #221d18; color: #f1e8da; border-radius: 12px; overflow: hidden; margin: 14px 0;
+    border: 1px solid #3f362c; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 15px;
+  }
+  .term .bar { background: #2e2822; padding: 6px 12px; font-size: 12px; color: #b3a591; display: flex; gap: 6px; align-items: center; }
+  .term .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff6b6b; }
+  .term .dot:nth-child(2) { background: #ffd166; } .term .dot:nth-child(3) { background: #6fe3a1; }
+  .term .screen { padding: 12px 14px; height: 260px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; }
+  .term .line { margin: 0; }
+  .term .p { color: #6fe3a1; } .term .err { color: #ff8f86; } .term .dim { color: #a89b88; }
+  .term .inputrow { display: flex; gap: 8px; padding: 8px 14px 12px; border-top: 1px solid #3f362c; align-items: center; }
+  .term .inputrow .pr { color: #6fe3a1; white-space: nowrap; }
+  .term input {
+    flex: 1; background: transparent; border: none; outline: none; color: #fff; font: inherit; min-width: 0;
+  }
+  .term .dir { color: #f0b46a; font-weight: 600; }
+  .term .screen { scrollbar-width: thin; }
+  .term:focus-within { border-color: #d98a4e; box-shadow: 0 0 0 2px rgba(217,138,78,.35); }
+  .fstree { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; line-height: 1.7; max-height: 220px; overflow: auto; }
+  .tasks { list-style: none; padding: 0; margin: 10px 0; }
+  .tasks li { padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; margin: 6px 0; display: flex; gap: 10px; align-items: center; background: var(--card); }
+  .tasks li .ck { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; font-size: 13px; flex: none; }
+  .tasks li.done { background: var(--ok-soft); border-color: var(--ok); }
+  .tasks li.done .ck { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .btn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .hint { min-height: 24px; font-size: 15px; margin: 6px 0; }
+  .hint.good { color: var(--ok); } .hint.bad { color: var(--bad); }
+
+  /* chips / cards */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 16px; padding: 7px 14px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .readout { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; min-height: 64px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 680px) { .twocol { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--card); }
+  .panel h4 { margin: 0 0 6px; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .cardgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 680px) { .cardgrid { grid-template-columns: 1fr; } }
+
+  /* quiz */
+  .quiz .q { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin: 12px 0; background: var(--card); }
+  .quiz .q p.qt { margin: 0 0 8px; font-weight: 600; }
+  .quiz .opt {
+    display: block; width: 100%; text-align: left; font: inherit; font-size: 16px; padding: 8px 12px; margin: 6px 0; cursor: pointer;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .quiz .opt.right { background: var(--ok-soft); border-color: var(--ok); }
+  .quiz .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .quiz .fb { font-size: 15px; margin-top: 6px; }
+  .score { font-size: 20px; font-weight: 700; margin: 10px 0; }
+
+  .donebar { display: flex; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border); flex-wrap: wrap; }
+  .donebtn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--ok); color: var(--ok); background: transparent;
+  }
+  .donebtn[aria-pressed="true"] { background: var(--ok); color: #fff; }
+  
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 30px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+    <p class="pct" id="pct">Progress: 0 of 7 sections marked done</p>
+    <nav id="nav" aria-label="Sections">
+      <a href="#s1" data-s="s1">1 Welcome</a>
+      <a href="#s2" data-s="s2">2 Python</a>
+      <a href="#s3" data-s="s3">3 Install</a>
+      <a href="#s4" data-s="s4">4 Terminal</a>
+      <a href="#s5" data-s="s5">5 Files &amp; REPL</a>
+      <a href="#s6" data-s="s6">6 Basics</a>
+      <a href="#s7" data-s="s7">7 Check yourself</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">FDE Module 2 &middot; Pre-read for Class 1</div>
+  <h1>Meet Python</h1>
+  <p class="lead">A gentle first look at Python, your terminal and the Python scratchpad, before Class 1 begins.</p>
+  <div class="pills">
+    <span class="pill">About 45 to 60 minutes</span>
+    <span class="pill">No experience needed</span>
+    <span class="pill">Interactive practice inside</span>
+  </div>
+</header>
+
+<!-- ================= 1 WELCOME ================= -->
+<section class="card" id="s1">
+  <h2><span class="num">1.</span> Welcome</h2>
+  <p>In Module 2 you will build the <strong>Meridian Case Intake Workbench</strong>: a small Python application that helps a support team see which customer cases need attention. Python is the tool you will use all the way through.</p>
+  <p>This pre-read is only an introduction. It will not teach you to write programs. It will help you get your computer ready, feel comfortable in the places where Python lives, and recognise the basic shapes you will meet in Class 1.</p>
+
+  <div class="twocol">
+    <div class="panel">
+      <h4>You will do</h4>
+      <ul>
+        <li>Learn what Python is, and how it differs from other languages</li>
+        <li>Install Python on your computer</li>
+        <li>Learn what a terminal is and use one</li>
+        <li>Learn what the Python REPL is and try it</li>
+        <li>Meet Python's basic data types and data structures</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>You do not need to</h4>
+      <ul>
+        <li>Memorise anything</li>
+        <li>Write full programs</li>
+        <li>Know loops, conditions or files yet. Class 1 teaches them step by step</li>
+        <li>Understand every line of code you see. Just notice the shape</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout tip"><strong class="t">How to use this page</strong>
+    Go in order. Type in the practice boxes, because typing helps you remember. Use the <em>Mark as done</em> button at the end of each section to track your progress. If a step fails, write down what you saw and tell your instructor. Please do not spend more than 15 minutes stuck on any one thing.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s1" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 2 WHAT IS PYTHON ================= -->
+<section class="card" id="s2">
+  <h2><span class="num">2.</span> What is Python?</h2>
+  <p>Python is a programming language: a way of writing instructions that a computer can follow. It is known for being <strong>readable</strong>. Python code often looks close to plain English, which is one reason it is so popular for data work, automation and AI.</p>
+  <p>You write instructions in text, and a program called the <strong>Python interpreter</strong> reads them and carries them out, one step at a time.</p>
+
+  <h3>If you already know another language</h3>
+  <p>Some of you may have used Java, C, JavaScript or another language. Python does a few things differently. These differences cause the most surprises, so here they are up front.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Idea</th><th>Many other languages</th><th>Python</th></tr>
+    <tr><td>Grouping code into blocks</td><td>Curly braces <code>{ }</code></td><td><strong>Indentation</strong> (spaces at the start of a line)</td></tr>
+    <tr><td>End of a statement</td><td>Semicolon <code>;</code></td><td>Just the end of the line</td></tr>
+    <tr><td>Declaring a variable's type</td><td><code>int x = 5;</code></td><td><strong>Not needed.</strong> <code>x = 5</code></td></tr>
+    <tr><td>Comments</td><td><code>// note</code> or <code>/* note */</code></td><td><code># note</code></td></tr>
+    <tr><td>Running code</td><td>Often compiled first</td><td>Read and run directly by the interpreter</td></tr>
+    <tr><td>Capital letters</td><td>Usually matter</td><td>Always matter: <code>Name</code> and <code>name</code> are different</td></tr>
+  </table>
+  </div>
+  <p>The two big ones, indentation and no type declarations, get their own interactive demos in Section 6.</p>
+  <div class="callout tip"><strong class="t">Two things to remember</strong>
+    In Python, <strong>indentation is part of the grammar</strong>, not decoration. And you <strong>do not declare types</strong>; Python works them out from the value you give it.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s2" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 3 INSTALL ================= -->
+<section class="card" id="s3">
+  <h2><span class="num">3.</span> Install Python</h2>
+  <p>Python is free. To use it on your own computer, you install it once. You need <strong>Python 3</strong>, and the course uses version <span class="placeholder">Python 3.12</span> or newer.</p>
+  <div class="callout warn"><strong class="t">Prepared environment</strong>
+    If your instructor has given you a prepared environment (a ready-made workspace), you can use that instead and skip the install. Installing Python yourself is still recommended, because you can practise on your own machine.
+  </div>
+  <p>Download from: <span class="placeholder"><a href="https://www.python.org/downloads/" style="text-decoration: none; color: inherit;">python.org/downloads/</a></span></p>
+
+  <div class="tabs" data-tabs="install">
+    <div class="tablist" role="tablist" aria-label="Operating system">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac</button>
+      <button role="tab" aria-selected="false" data-tab="lin">Linux</button>
+    </div>
+
+    <div class="tabpanel active" data-panel="win">
+      <ol class="steps">
+        <li>Download the Windows installer from the link above.</li>
+        <li>Run it. On the <strong>first screen</strong>, tick <strong>"Add python.exe to PATH"</strong> before you click anything else. This step is easy to miss and it matters.</li>
+        <li>Click <strong>Install Now</strong> and wait for "Setup was successful".</li>
+        <li>Close any open terminal, open a new <strong>PowerShell</strong> window (see Section 4), and run <code>python --version</code>. If it is not found, try <code>py --version</code>.</li>
+      </ol>
+    </div>
+
+    <div class="tabpanel" data-panel="mac">
+      <ol class="steps">
+        <li>Download the macOS installer (a <code>.pkg</code> file) from the link above.</li>
+        <li>Open it and follow the prompts, accepting the defaults.</li>
+        <li>Open <strong>Terminal</strong> (see Section 4) and run <code>python3 --version</code>.</li>
+        <li>On a new Mac, the first time you run <code>python3</code> it may ask you to install "command line developer tools". Click <strong>Install</strong> and wait. This is normal.</li>
+        <li>On Mac, use <code>python3</code> instead of <code>python</code> in commands.</li>
+      </ol>
+    </div>
+
+    <div class="tabpanel" data-panel="lin">
+      <ol class="steps">
+        <li>Most Linux systems already have Python 3. Open a terminal and run <code>python3 --version</code>.</li>
+        <li>If it is missing or too old, install it. Choose the line for your system:</li>
+      </ol>
+      <div class="codeblock"><div class="label">Ubuntu or Debian</div><button class="copy">Copy</button><pre>sudo apt update
+sudo apt install python3 python3-venv python3-pip</pre></div>
+      <div class="codeblock"><div class="label">Fedora</div><button class="copy">Copy</button><pre>sudo dnf install python3 python3-pip</pre></div>
+      <div class="codeblock"><div class="label">Arch</div><button class="copy">Copy</button><pre>sudo pacman -S python</pre></div>
+      <p>On Linux, use <code>python3</code> instead of <code>python</code> in commands.</p>
+    </div>
+  </div>
+
+  <h3>Check that it worked</h3>
+  <p>Open a terminal and run the version command for your system. You should see a number that begins with <strong>3</strong>.</p>
+  <div class="codeblock"><div class="label">Type one of these in a terminal</div><button class="copy">Copy</button><pre>python --version
+# or: python3 --version     (Mac and Linux)
+# or: py --version          (Windows, if "python" is not found)
+
+# You should see something like:
+# Python 3.12.3</pre></div>
+  <p class="small muted">Not sure how to open a terminal yet? That is the next section. Come back to this check afterwards.</p>
+
+  <h3>If something goes wrong</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you see</th><th>Likely cause and fix</th></tr>
+    <tr><td>"python is not recognised" (Windows)</td><td>"Add python.exe to PATH" was not ticked. Run the installer again, choose <em>Modify</em> or <em>Repair</em>, and tick it. Or try <code>py</code>.</td></tr>
+    <tr><td>"command not found: python" (Mac or Linux)</td><td>Use <code>python3</code> instead of <code>python</code>.</td></tr>
+    <tr><td>The version number begins with 2</td><td>An old Python is being used. Use <code>python3</code> or install the course version.</td></tr>
+  </table>
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s3" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 4 TERMINAL ================= -->
+<section class="card" id="s4">
+  <h2><span class="num">4.</span> The terminal</h2>
+  <h3>What is a terminal?</h3>
+  <p>Most of the time you use your computer by clicking: you open a folder, double-click a file, press a button. A <strong>terminal</strong> is another way. It is a plain text window where you <strong>type instructions</strong> and the computer answers in text.</p>
+  <p>Why use it? Because many developer tools, including Python, are built to be used this way. Typing a command is quick, exact and repeatable. A command you type today works the same way tomorrow, and you can share it with a colleague.</p>
+
+  <h3>How it works</h3>
+  <p>A terminal does one thing, over and over: it waits for you, runs what you typed, shows the result and waits again.</p>
+  <div class="flow" aria-label="How a terminal works">
+    <div class="box"><b>1. Prompt</b>The terminal waits and shows a prompt</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>2. You type</b>A command, then press Enter</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>3. It runs</b>The computer carries it out</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>4. Output</b>The result is printed, then a new prompt</div>
+  </div>
+  <p>Here is a real line, colour-coded:</p>
+  <div class="anatomy" aria-label="Anatomy of a terminal line">
+    <span class="a-prompt">learner@laptop:~$</span><span class="a-cmd">python --version</span>
+  </div>
+  <div class="anatomy"><span class="a-out">Python 3.12.3</span></div>
+  <p class="legend"><span style="color:#4a5f8f">Blue-grey</span> is the <strong>prompt</strong> (the terminal is ready; yours will look a little different). <span style="color:#1f7a3a">Green</span> is the <strong>command</strong> you type. The grey box underneath is the <strong>output</strong>.</p>
+
+  <h3>One idea to hold on to: you are always "in" a folder</h3>
+  <p>A terminal is always working from one folder, called the <strong>current folder</strong> (or working directory). When you run a command that mentions a file, the computer looks for that file in the current folder. This is why "file not found" errors usually just mean "you are in a different folder than you think".</p>
+
+  <h3>How to open a terminal</h3>
+  <div class="tabs" data-tabs="openterm">
+    <div class="tablist" role="tablist" aria-label="Operating system">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac</button>
+      <button role="tab" aria-selected="false" data-tab="lin">Linux</button>
+      <button role="tab" aria-selected="false" data-tab="vsc">Inside VS Code</button>
+    </div>
+    <div class="tabpanel active" data-panel="win"><p>Press the <strong>Windows key</strong>, type <strong>PowerShell</strong> (or <strong>Terminal</strong> on Windows 11), and press Enter.</p></div>
+    <div class="tabpanel" data-panel="mac"><p>Press <strong>Command + Space</strong>, type <strong>Terminal</strong>, and press Enter. Or open Finder, then Applications, then Utilities, then Terminal.</p></div>
+    <div class="tabpanel" data-panel="lin"><p>Press <strong>Ctrl + Alt + T</strong> on most systems. Or open the applications menu and search for <strong>Terminal</strong>.</p></div>
+    <div class="tabpanel" data-panel="vsc"><p>In VS Code, choose <strong>Terminal</strong> from the menu, then <strong>New Terminal</strong>. It opens already inside your project folder, which is very convenient. VS Code download: <span class="placeholder"><a href="https://code.visualstudio.com/download" style="text-decoration: none; color: inherit;">code.visualstudio.com/download</a></span></p></div>
+  </div>
+
+  <h3>Four commands to know</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you want</th><th>Command</th><th>Notes</th></tr>
+    <tr><td>Show the current folder</td><td><code>pwd</code></td><td>"Print working directory". Works on Mac, Linux and PowerShell.</td></tr>
+    <tr><td>List the files here</td><td><code>ls</code></td><td>On older Windows Command Prompt, use <code>dir</code>.</td></tr>
+    <tr><td>Move into a folder</td><td><code>cd foldername</code></td><td>"Change directory".</td></tr>
+    <tr><td>Go up one folder</td><td><code>cd ..</code></td><td>Two dots mean "the parent folder".</td></tr>
+  </table>
+  </div>
+
+  <h3>Try it: a practice terminal</h3>
+  <p>This is a pretend terminal inside your browser. Nothing you type here can break anything. Complete the five tasks. Type <code>help</code> if you get stuck.</p>
+  <ul class="tasks" id="termTasks">
+    <li data-task="pwd"><span class="ck"></span>Find out where you are: <code>pwd</code></li>
+    <li data-task="ls"><span class="ck"></span>See what is in this folder: <code>ls</code></li>
+    <li data-task="cd"><span class="ck"></span>Move into the course folder: <code>cd meridian_course</code></li>
+    <li data-task="ver"><span class="ck"></span>Check Python's version: <code>python --version</code> (or <code>python3 --version</code>)</li>
+    <li data-task="run"><span class="ck"></span>Run the file: <code>python hello.py</code></li>
+  </ul>
+  <div class="term" id="term">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">practice terminal</span></div>
+    <div class="screen" id="termScreen" aria-live="polite"></div>
+    <div class="inputrow"><span class="pr" id="termPrompt"></span><input id="termInput" autocomplete="off" spellcheck="false" aria-label="Terminal input"></div>
+  </div>
+  <div class="panel" style="margin:10px 0"><h4>Your folders, live</h4><div class="fstree" id="fsTree" aria-label="Folder map that updates as you type commands"></div><p class="small muted" style="margin:6px 0 0">This map updates as you use <code>cd</code>, <code>mkdir</code>, <code>touch</code> and <code>rm</code>. The highlighted folder is your current folder.</p></div>
+  <div class="btnrow"><button class="btn ghost" id="termReset">Reset practice terminal</button></div>
+  <div class="donebar"><button class="donebtn" data-done="s4" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 5 FILES AND REPL ================= -->
+<section class="card" id="s5">
+  <h2><span class="num">5.</span> Two ways to run Python: a file, and the REPL</h2>
+  <p>You can give Python instructions in two different ways. You will use both in this course.</p>
+
+  <h3>Way 1: a Python file (a script)</h3>
+  <p>A Python file is a text file whose name ends in <code>.py</code>. You write several instructions in it, save it, and ask Python to run the whole file from top to bottom. Here is the smallest useful one. It has two lines, and the first starts with <code>#</code>, which makes it a comment that Python ignores.</p>
+  <div class="codeblock"><div class="label">hello.py</div><button class="copy">Copy</button><pre># My first Python file
+print("Meridian case batch received")</pre></div>
+  <p>To run it, open a terminal in the folder that contains the file and type:</p>
+  <div class="codeblock"><button class="copy">Copy</button><pre>python hello.py
+
+# Output:
+# Meridian case batch received</pre></div>
+  <p><code>print(...)</code> tells Python to show something on the screen. A file is saved, repeatable and shareable. Everything you build in this course will live in files.</p>
+
+  <h3>Way 2: the REPL</h3>
+  <p>The second way is to talk to Python directly, one line at a time, without making a file. This is called the <strong>REPL</strong> (say "reh-pul").</p>
+
+  <h3>What is the REPL, really?</h3>
+  <p>REPL is short for <strong>Read, Eval, Print, Loop</strong>. Each word is one step of what Python does every time you type something:</p>
+  <div class="flow" aria-label="Read Eval Print Loop">
+    <div class="box"><b>Read</b>Python reads the line you typed</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>Eval</b>It works out ("evaluates") what the line means</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>Print</b>It shows you the result</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>Loop</b>It goes back and waits for your next line</div>
+  </div>
+  <p>The easiest way to picture it is a <strong>conversation</strong>. You say one sentence, Python answers straight away, then it waits for your next sentence. A file, by contrast, is like writing a whole letter and posting it in one go.</p>
+  <ul>
+    <li><strong>It answers immediately.</strong> You see the result of each line as soon as you press Enter.</li>
+    <li><strong>It remembers.</strong> If you store a value on one line, you can use it on a later line, for as long as the REPL stays open. When you close it, the memory is gone.</li>
+    <li><strong>Mistakes are cheap.</strong> If you type something wrong, Python shows an error and gives you a new prompt. Nothing breaks, and the REPL keeps going.</li>
+    <li><strong>It is a scratchpad.</strong> Nothing is saved. That makes it perfect for trying an idea quickly before putting it into a file.</li>
+  </ul>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>Python file</th><th>The REPL</th></tr>
+    <tr><td>How you use it</td><td>Write many lines, run them all</td><td>Type one line at a time</td></tr>
+    <tr><td>Result appears</td><td>When the whole file runs</td><td>After every line</td></tr>
+    <tr><td>Saved?</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Best for</td><td>Real programs you will keep and reuse</td><td>Trying things, checking an idea, learning</td></tr>
+  </table>
+  </div>
+
+  <h3>How to start and leave the REPL</h3>
+  <p>In a terminal, type <code>python</code> (or <code>python3</code> on Mac and Linux, or <code>py</code> on Windows) and press Enter, with no file name. You will see some text and then a new prompt that looks like <code>&gt;&gt;&gt;</code>. That prompt means "Python is listening". To leave, type <code>exit()</code> and press Enter. You are back at the terminal's own prompt.</p>
+  <div class="callout warn"><strong class="t">Two prompts, two different things</strong>
+    The terminal's prompt (like <code>learner@laptop:~$</code>) waits for <em>terminal commands</em>. The REPL's prompt <code>&gt;&gt;&gt;</code> waits for <em>Python code</em>. Typing Python at the terminal prompt, or a terminal command at <code>&gt;&gt;&gt;</code>, will give an error. When something confusing happens, look at the prompt and ask yourself which one you are talking to.
+  </div>
+
+  <h3>Try it: a guided REPL</h3>
+  <p>This pretend REPL walks you through nine lines. Type the line shown, or press <em>Type it for me</em>. Press Enter to run it. Read the explanation after each step.</p>
+  <div class="term" id="repl">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">practice REPL</span></div>
+    <div class="screen" id="replScreen" aria-live="polite"></div>
+    <div class="inputrow"><span class="pr">&gt;&gt;&gt;</span><input id="replInput" autocomplete="off" spellcheck="false" aria-label="REPL input"></div>
+  </div>
+  <p class="hint" id="replHint"></p>
+  <div class="callout tip" id="replExplain" style="display:none"></div>
+  <div class="btnrow">
+    <button class="btn" id="replFill">Type it for me</button>
+    <button class="btn ghost" id="replReset">Start over</button>
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s5" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 6 BASICS ================= -->
+<section class="card" id="s6">
+  <h2><span class="num">6.</span> Python basics: the shapes you will see</h2>
+  <p>Here is a light tour of what Python code looks like. Remember, you are not learning to write it yet. You are learning to <em>recognise</em> it. Class 1 teaches how to use each of these step by step.</p>
+
+  <h3>6.1 Indentation matters</h3>
+  <p>In many languages, curly braces mark which lines belong together. Python uses <strong>indentation</strong>, the spaces at the start of a line. Lines indented under a line that ends with a colon <code>:</code> belong to it. The standard is <strong>four spaces</strong>.</p>
+  <p class="small muted">The example below uses an <code>if</code>. You do not need to know what <code>if</code> does yet. Just notice the colon, and the indented line underneath.</p>
+  <div class="btnrow">
+    <button class="btn ghost" id="indWrong">Show the wrong version</button>
+    <button class="btn" id="indRight">Show the right version</button>
+  </div>
+  <div class="twocol">
+    <div class="panel"><h4>The code</h4><pre class="mono" id="indCode" style="margin:0;white-space:pre-wrap">Press a button above.</pre></div>
+    <div class="panel"><h4>What Python says</h4><pre class="mono" id="indOut" style="margin:0;white-space:pre-wrap">&nbsp;</pre></div>
+  </div>
+  <div class="callout warn"><strong class="t">Rules of thumb</strong>
+    Use four spaces for each level. Do not mix tabs and spaces. If you see <code>IndentationError</code>, look at the spaces at the start of the line it points to.
+  </div>
+
+  <h3>6.2 You do not declare types</h3>
+  <p>In languages like Java or C, you must say what kind of value a variable will hold before you use it, and it cannot change. In Python, you just give the variable a value, and Python works out the type for you. The same name can even point to a different kind of value later.</p>
+  <div class="twocol">
+    <div class="panel"><h4>Java / C style</h4><pre class="mono" style="margin:0">int x = 5;
+x = "five";   // error: x must be an int</pre></div>
+    <div class="panel"><h4>Python</h4><pre class="mono" style="margin:0">x = 5
+x = "five"    # fine</pre></div>
+  </div>
+  <p><strong>Try it:</strong> press each button and watch the type of <code>x</code> change.</p>
+  <div class="chips" id="dynChips">
+    <button class="chip" data-v='x = 5' data-t="int" aria-pressed="false">x = 5</button>
+    <button class="chip" data-v='x = "five"' data-t="str" aria-pressed="false">x = "five"</button>
+    <button class="chip" data-v='x = 3.5' data-t="float" aria-pressed="false">x = 3.5</button>
+    <button class="chip" data-v='x = True' data-t="bool" aria-pressed="false">x = True</button>
+    <button class="chip" data-v='x = None' data-t="NoneType" aria-pressed="false">x = None</button>
+  </div>
+  <div class="readout mono" id="dynOut">Press a button.</div>
+  <p class="small muted">Python still has types. It just does not ask you to write them. You can always ask with <code>type(x)</code>.</p>
+
+  <h3>6.3 The basic data types</h3>
+  <p>Every value has a type. These five come up constantly. Click one to see it.</p>
+  <div class="chips" id="typeChips">
+    <button class="chip" data-i="0" aria-pressed="false">42</button>
+    <button class="chip" data-i="1" aria-pressed="false">3.14</button>
+    <button class="chip" data-i="2" aria-pressed="false">"C-1002"</button>
+    <button class="chip" data-i="3" aria-pressed="false">True</button>
+    <button class="chip" data-i="4" aria-pressed="false">None</button>
+  </div>
+  <div class="readout" id="typeOut">Click a value above.</div>
+
+  <h3>6.4 The built-in data structures</h3>
+  <p>A data structure holds more than one value. Python has four built-in ones that you will use all the time. The brackets are how you tell them apart.</p>
+  <div class="tabs" data-tabs="structs">
+    <div class="tablist" role="tablist" aria-label="Data structures">
+      <button role="tab" aria-selected="true" data-tab="list">List [ ]</button>
+      <button role="tab" aria-selected="false" data-tab="tuple">Tuple ( )</button>
+      <button role="tab" aria-selected="false" data-tab="dict">Dictionary { : }</button>
+      <button role="tab" aria-selected="false" data-tab="set">Set { }</button>
+    </div>
+    <div class="tabpanel active" data-panel="list">
+      <p><strong>List:</strong> an ordered collection you can change. Items are read by position, and counting starts at <strong>0</strong>.</p>
+      <div class="codeblock"><button class="copy">Copy</button><pre>statuses = ["SHIPPED", "DELIVERED", "PROCESSING"]
+statuses[0]                 # 'SHIPPED'  (the first item)
+statuses.append("CANCELLED")  # add an item to the end
+len(statuses)               # 4</pre></div>
+    </div>
+    <div class="tabpanel" data-panel="tuple">
+      <p><strong>Tuple:</strong> an ordered collection that <strong>cannot be changed</strong> after you create it. Good for values that belong together, like a pair.</p>
+      <div class="codeblock"><button class="copy">Copy</button><pre>pair = ("C-1002", "O-5002")
+pair[0]                     # 'C-1002'
+# pair[0] = "C-9999"        # error: a tuple cannot be changed</pre></div>
+    </div>
+    <div class="tabpanel" data-panel="dict">
+      <p><strong>Dictionary:</strong> labelled values, written as <code>key: value</code> pairs. You read a value by its key, not by position. A real case in this course will look like this.</p>
+      <div class="codeblock"><button class="copy">Copy</button><pre>case = {"case_id": "C-1002", "order_status": "SHIPPED"}
+case["order_status"]        # 'SHIPPED'
+case["note_id"] = "N-01"    # add a new key and value</pre></div>
+    </div>
+    <div class="tabpanel" data-panel="set">
+      <p><strong>Set:</strong> a collection of <strong>unique</strong> values with no repeats and no fixed order. Good for "is this value in the group?".</p>
+      <div class="codeblock"><button class="copy">Copy</button><pre>closed = {"DELIVERED", "CANCELLED", "DELIVERED"}
+len(closed)                 # 2  (the repeat disappeared)
+"DELIVERED" in closed       # True</pre></div>
+      <p class="small muted">Careful: <code>{}</code> on its own is an empty <em>dictionary</em>. An empty set is written <code>set()</code>.</p>
+    </div>
+  </div>
+  <div class="tablewrap">
+  <table>
+    <tr><th></th><th>List</th><th>Tuple</th><th>Dictionary</th><th>Set</th></tr>
+    <tr><td>Brackets</td><td><code>[ ]</code></td><td><code>( )</code></td><td><code>{ k: v }</code></td><td><code>{ }</code></td></tr>
+    <tr><td>Ordered?</td><td>Yes</td><td>Yes</td><td>Keeps insertion order</td><td>No</td></tr>
+    <tr><td>Can you change it?</td><td>Yes</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Repeats allowed?</td><td>Yes</td><td>Yes</td><td>Keys are unique</td><td>No</td></tr>
+    <tr><td>Read by</td><td>Position</td><td>Position</td><td>Key</td><td>Membership check</td></tr>
+  </table>
+  </div>
+
+  <h3>Quick check: which structure?</h3>
+  <div class="quiz" id="structQuiz"></div>
+  <div class="donebar"><button class="donebtn" data-done="s6" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 7 CHECK ================= -->
+<section class="card" id="s7">
+  <h2><span class="num">7.</span> Check yourself</h2>
+  <p>Seven quick questions. They are not graded. They simply show you what to look at again. You can retry as often as you like.</p>
+  <div class="quiz" id="finalQuiz"></div>
+  <div class="score" id="finalScore"></div>
+
+  <h3>Before Class 1: your checklist</h3>
+  <ul class="tasks" id="finalChecks">
+    <li data-check="1"><span class="ck"></span>Python is installed, and the version command shows a number starting with 3</li>
+    <li data-check="2"><span class="ck"></span>I can open a terminal</li>
+    <li data-check="3"><span class="ck"></span>I can run <code>python hello.py</code> or know who to ask if it fails</li>
+    <li data-check="4"><span class="ck"></span>I can start the REPL and leave it with <code>exit()</code></li>
+  </ul>
+  <p class="small muted">Click an item to tick it.</p>
+
+  <div class="callout ok"><strong class="t">What happens next</strong>
+    In Class 1 you will use Python on Meridian's support-case data. You will meet variables, decisions, loops, functions and files one small step at a time. This page was only your first look. Send your instructor a note if any step above did not work, or if anything felt unclear.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s7" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<footer>FDE Module 2 &middot; Class 1 pre-read</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  /* ---------- generic tabs ---------- */
+  $$('.tabs').forEach(function (box) {
+    var btns = $$('[role="tab"]', box), panels = $$('.tabpanel', box);
+    function show(name) {
+      btns.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'); });
+      panels.forEach(function (p) { p.classList.toggle('active', p.dataset.panel === name); });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab); }); });
+    box._show = show;
+  });
+  /* preselect the learner's operating system */
+  try {
+    var plat = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '').toLowerCase();
+    var os = plat.indexOf('win') > -1 ? 'win' : (plat.indexOf('mac') > -1 ? 'mac' : (plat.indexOf('linux') > -1 || plat.indexOf('x11') > -1 ? 'lin' : ''));
+    if (os) { ['install', 'openterm'].forEach(function (k) { var b = $('[data-tabs="' + k + '"]'); if (b && b._show) b._show(os); }); }
+  } catch (e) { /* ignore */ }
+
+  /* ---------- copy buttons ---------- */
+  $$('.codeblock').forEach(function (cb) {
+    var btn = $('.copy', cb), pre = $('pre', cb);
+    if (!btn || !pre) return;
+    btn.addEventListener('click', function () {
+      var text = pre.textContent;
+      function ok() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
+      } catch (e) { fallback(); }
+      function fallback() {
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e2) { btn.textContent = 'Select and copy'; }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+
+  /* ---------- progress ---------- */
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem('c1preread') || '{}') || {}; } catch (e) { done = {}; }
+  function save() { try { localStorage.setItem('c1preread', JSON.stringify(done)); } catch (e) { /* ignore */ } }
+  function refresh() {
+    var ids = ['s1', 's2', 's3', 's4', 's5', 's6', 's7'], n = 0;
+    ids.forEach(function (id) {
+      var on = !!done[id]; if (on) n++;
+      $$('[data-done="' + id + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.textContent = on ? 'Done \u2713' : 'Mark as done'; });
+      var a = $('nav a[data-s="' + id + '"]'); if (a) a.classList.toggle('done', on);
+    });
+    $('#bar').style.width = Math.round(n / ids.length * 100) + '%';
+    $('#pct').textContent = 'Progress: ' + n + ' of ' + ids.length + ' sections marked done';
+  }
+  $$('[data-done]').forEach(function (b) {
+    b.addEventListener('click', function () { done[b.dataset.done] = !done[b.dataset.done]; save(); refresh(); });
+  });
+  refresh();
+
+  /* ---------- practice terminal (virtual shell, upgraded) ---------- */
+  var HOMEP = ['home', 'learner'];
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var CMDS = ['cat', 'cd', 'clear', 'cls', 'cp', 'date', 'dir', 'echo', 'head', 'help', 'history', 'hostname', 'ls', 'mkdir', 'mv', 'pwd', 'py', 'python', 'python3', 'rm', 'touch', 'wc', 'whoami'];
+  var scr = $('#termScreen'), inp = $('#termInput'), prm = $('#termPrompt');
+  var root, cwd, prevDir, hist = [], hi = 0, tasksDone = {}, lastTab = null, draft = '';
+  scr.setAttribute('role', 'log');
+
+  /* --- virtual file system --- */
+  function mkd(k) { return { type: 'dir', kids: Object.assign(Object.create(null), k || {}), t: Date.now() }; }
+  function mkf(c) { return { type: 'file', content: c || '', t: Date.now() }; }
+  function cloneNode(n) {
+    if (n.type === 'file') return mkf(n.content);
+    var d = mkd(); Object.keys(n.kids).forEach(function (k) { d.kids[k] = cloneNode(n.kids[k]); }); return d;
+  }
+  function buildFS() {
+    var hello = '# My first Python file\nprint("Meridian case batch received")\n';
+    var csv = 'case_id,order_status,note_id\nC-1001,DELIVERED,N-01\nC-1002,SHIPPED,N-02\nC-1003,PROCESSING,\n';
+    return mkd({ home: mkd({ learner: mkd({
+      meridian_course: mkd({ 'hello.py': mkf(hello), 'notes.txt': mkf('Class 1 notes\n'), data: mkd({ 'cases.csv': mkf(csv) }) }),
+      Downloads: mkd(), Documents: mkd()
+    }) }) });
+  }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function stamp(ms) { var d = new Date(ms); return MON[d.getMonth()] + ' ' + (d.getDate() < 10 ? ' ' : '') + d.getDate() + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()); }
+  function resolve(p) {
+    var base, parts;
+    if (p && p[0] === '/') { base = []; parts = p.split('/'); }
+    else if (p === '~' || (p && p.indexOf('~/') === 0)) { base = HOMEP.slice(); parts = p.slice(2).split('/'); }
+    else { base = cwd.slice(); parts = (p || '').split('/'); }
+    parts.forEach(function (s) { if (!s || s === '.') return; if (s === '..') base.pop(); else base.push(s); });
+    return base;
+  }
+  function nodeAt(path) {
+    var n = root;
+    for (var i = 0; i < path.length; i++) { if (!n || n.type !== 'dir' || !(path[i] in n.kids)) return null; n = n.kids[path[i]]; }
+    return n;
+  }
+  function split(path) { var d = nodeAt(path.slice(0, -1)); return { dir: d && d.type === 'dir' ? d : null, name: path[path.length - 1] }; }
+  function eq(a, b) { return a.length === b.length && a.every(function (x, i) { return x === b[i]; }); }
+  function isPrefix(p, q) { return p.length <= q.length && p.every(function (x, i) { return x === q[i]; }); }
+  function pstr(path) { return '/' + path.join('/'); }
+  function disp(path) {
+    if (path.length >= 2 && path[0] === 'home' && path[1] === 'learner') { var r = path.slice(2); return r.length ? '~/' + r.join('/') : '~'; }
+    return pstr(path);
+  }
+  function promptText() { return 'learner@laptop:' + disp(cwd) + '$'; }
+
+  /* --- screen output --- */
+  function out(t, cls) { var l = document.createElement('div'); l.className = 'line' + (cls ? ' ' + cls : ''); l.textContent = t === '' ? '\u00a0' : t; scr.appendChild(l); scr.scrollTop = scr.scrollHeight; }
+  function outParts(parts, sep) {
+    var l = document.createElement('div'); l.className = 'line';
+    parts.forEach(function (it, i) {
+      if (i && sep) l.appendChild(document.createTextNode(sep));
+      var s = document.createElement('span'); if (it.dir) s.className = 'dir'; s.textContent = it.t; l.appendChild(s);
+    });
+    scr.appendChild(l); scr.scrollTop = scr.scrollHeight;
+  }
+  function echoLine(text) {
+    var l = document.createElement('div'); l.className = 'line';
+    var s = document.createElement('span'); s.className = 'p'; s.textContent = promptText();
+    l.appendChild(s); l.appendChild(document.createTextNode(' ' + text)); scr.appendChild(l); scr.scrollTop = scr.scrollHeight;
+  }
+  function mark(k) {
+    if (tasksDone[k]) return; tasksDone[k] = true;
+    var li = $('#termTasks [data-task="' + k + '"]'); if (li) { li.classList.add('done'); $('.ck', li).textContent = '\u2713'; }
+    var all = ['pwd', 'ls', 'cd', 'ver', 'run'].every(function (x) { return tasksDone[x]; });
+    if (all) out('All five tasks done. Nicely done.', 'p');
+  }
+
+  /* --- live folder view --- */
+  function renderTree() {
+    var box = $('#fsTree'); if (!box) return; box.textContent = '';
+    var inHome = cwd.length >= 2 && cwd[0] === 'home' && cwd[1] === 'learner';
+    var rp = inHome ? HOMEP.slice() : [];
+    function row(label, depth, isDir, here) {
+      var d = document.createElement('div'); d.style.paddingLeft = (depth * 18) + 'px';
+      var s = document.createElement('span'); s.textContent = (isDir ? '\u25B8 ' : '\u00B7 ') + label;
+      if (here) { s.style.cssText = 'background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:6px;padding:1px 8px'; }
+      else if (isDir) { s.style.color = 'var(--accent)'; }
+      d.appendChild(s);
+      if (here) { var h = document.createElement('span'); h.className = 'muted small'; h.textContent = '   \u2190 you are here'; d.appendChild(h); }
+      box.appendChild(d);
+    }
+    function walk(node, path, depth) {
+      Object.keys(node.kids).sort().forEach(function (k) {
+        var n = node.kids[k], p = path.concat(k), isDir = n.type === 'dir';
+        row(k + (isDir ? '/' : ''), depth, isDir, isDir && eq(p, cwd));
+        if (isDir) walk(n, p, depth + 1);
+      });
+    }
+    row(inHome ? '~  (your home folder)' : '/', 0, true, eq(rp, cwd));
+    walk(nodeAt(rp), rp, 1);
+  }
+
+  /* --- tiny Python runner for simple print() scripts --- */
+  function PyErr(kind, msg) { this.kind = kind; this.msg = msg; }
+  function splitTop(s, sep) {
+    var o = [], cur = '', q = null, d = 0, ch;
+    for (var i = 0; i < s.length; i++) {
+      ch = s[i];
+      if (q) { cur += ch; if (ch === q) q = null; }
+      else if (ch === '"' || ch === "'") { q = ch; cur += ch; }
+      else if (ch === '(') { d++; cur += ch; }
+      else if (ch === ')') { d--; cur += ch; }
+      else if (ch === sep && d === 0) { o.push(cur); cur = ''; }
+      else cur += ch;
+    }
+    o.push(cur); return o;
+  }
+  function pyFmt(v) {
+    if (v.t === 'str' || v.t === 'raw') return v.v;
+    if (v.t === 'bool') return v.v ? 'True' : 'False';
+    if (v.t === 'NoneType') return 'None';
+    if (v.t === 'float' && Number.isInteger(v.v)) return v.v.toFixed(1);
+    return String(v.v);
+  }
+  function pyTerm(t, vars) {
+    t = t.trim(); var m;
+    if (!t) throw new PyErr('SyntaxError', 'invalid syntax');
+    if ((m = t.match(/^"([^"]*)"$/)) || (m = t.match(/^'([^']*)'$/))) return { t: 'str', v: m[1] };
+    if (/^["']/.test(t) && (t.split(t[0]).length - 1) % 2 === 1) throw new PyErr('SyntaxError', 'unterminated string literal (detected at line {L})');
+    if (/^-?\d+$/.test(t)) return { t: 'int', v: parseInt(t, 10) };
+    if (/^-?\d*\.\d+$|^-?\d+\.\d*$/.test(t)) return { t: 'float', v: parseFloat(t) };
+    if (t === 'True' || t === 'False') return { t: 'bool', v: t === 'True' };
+    if (t === 'None') return { t: 'NoneType', v: null };
+    if ((m = t.match(/^(len|type)\((.*)\)$/))) {
+      var inner = pyExpr(m[2], vars);
+      if (m[1] === 'type') return { t: 'raw', v: "<class '" + inner.t + "'>" };
+      if (inner.t !== 'str') throw new PyErr('TypeError', "object of type '" + inner.t + "' has no len()");
+      return { t: 'int', v: inner.v.length };
+    }
+    if (/^[A-Za-z_]\w*$/.test(t)) {
+      if (Object.prototype.hasOwnProperty.call(vars, t)) return vars[t];
+      throw new PyErr('NameError', "name '" + t + "' is not defined");
+    }
+    throw new PyErr('Unsupported', '');
+  }
+  function pyExpr(e, vars) {
+    var terms = splitTop(e, '+'), acc = pyTerm(terms[0], vars);
+    for (var i = 1; i < terms.length; i++) {
+      var b = pyTerm(terms[i], vars), na = acc.t === 'int' || acc.t === 'float', nb = b.t === 'int' || b.t === 'float';
+      if (acc.t === 'str' && b.t === 'str') acc = { t: 'str', v: acc.v + b.v };
+      else if (na && nb) acc = { t: (acc.t === 'float' || b.t === 'float') ? 'float' : 'int', v: acc.v + b.v };
+      else if (acc.t === 'str') throw new PyErr('TypeError', 'can only concatenate str (not "' + b.t + '") to str');
+      else throw new PyErr('TypeError', "unsupported operand type(s) for +: '" + acc.t + "' and '" + b.t + "'");
+    }
+    return acc;
+  }
+  function runPy(src, fname, w) {
+    var lines = src.split('\n'), vars = {};
+    for (var i = 0; i < lines.length; i++) {
+      var raw = lines[i], ln = raw.trim(), m;
+      if (!ln || ln[0] === '#') continue;
+      try {
+        if (/^\s/.test(raw)) throw new PyErr('Unsupported', '');
+        if ((m = ln.match(/^print\((.*)\)$/))) {
+          var args = m[1].trim() === '' ? [] : splitTop(m[1], ',');
+          w(args.map(function (x) { return pyFmt(pyExpr(x, vars)); }).join(' '));
+        } else if (/^print\(/.test(ln)) {
+          throw new PyErr('SyntaxError', "'(' was never closed");
+        } else if ((m = ln.match(/^([A-Za-z_]\w*)\s*=(?!=)\s*(.+)$/))) {
+          vars[m[1]] = pyExpr(m[2], vars);
+        } else { throw new PyErr('Unsupported', ''); }
+      } catch (e) {
+        if (!(e instanceof PyErr)) throw e;
+        if (e.kind === 'Unsupported') { out('(This practice terminal can only run simple print() scripts.)', 'dim'); return false; }
+        var msg = e.msg.replace('{L}', i + 1);
+        if (e.kind === 'SyntaxError') {
+          out('  File "' + fname + '", line ' + (i + 1), 'err');
+          if (fname !== '<string>') out('    ' + ln, 'err');
+          out('SyntaxError: ' + msg, 'err');
+        } else {
+          out('Traceback (most recent call last):', 'err');
+          out('  File "' + fname + '", line ' + (i + 1) + ', in <module>', 'err');
+          if (fname !== '<string>') out('    ' + ln, 'err');
+          out(e.kind + ': ' + msg, 'err');
+        }
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /* --- parsing --- */
+  function tokenize(s) {
+    var toks = [], cur = '', has = false, q = null, ch;
+    function flush() { if (has || cur) { toks.push({ v: cur, q: has }); } cur = ''; has = false; }
+    for (var i = 0; i < s.length; i++) {
+      ch = s[i];
+      if (q) { if (ch === q) q = null; else cur += ch; }
+      else if (ch === '"' || ch === "'") { q = ch; has = true; }
+      else if (ch === ' ' || ch === '\t') { flush(); }
+      else if (ch === '>') { flush(); if (s[i + 1] === '>') { toks.push({ v: '>>', op: true }); i++; } else toks.push({ v: '>', op: true }); }
+      else cur += ch;
+    }
+    if (q) return { err: 'unexpected EOF while looking for matching quote' };
+    flush(); return toks;
+  }
+  function readFile(tg, name) {
+    var n = nodeAt(resolve(tg));
+    if (!n) { out(name + ': ' + tg + ': No such file or directory', 'err'); return null; }
+    if (n.type === 'dir') { out(name + ': ' + tg + ': Is a directory', 'err'); return null; }
+    return n.content;
+  }
+  function linesOf(s) { if (!s) return []; var l = s.split('\n'); if (l[l.length - 1] === '') l.pop(); return l; }
+
+  /* --- commands --- */
+  function exec(c, a, w, wp, cmd) {
+    var flags = '', args = [], i;
+    if (c === 'dir') c = 'ls';
+    if (c === 'cls') c = 'clear';
+    if (['ls', 'mkdir', 'rm', 'cp', 'mv', 'cat', 'wc', 'touch'].indexOf(c) > -1) {
+      a.forEach(function (x) { if (x.length > 1 && x[0] === '-') flags += x.slice(1); else args.push(x); });
+    } else { args = a; }
+    switch (c) {
+      case 'help':
+        w('Commands: pwd, ls, cd <folder>, cd .., python --version, python hello.py, clear, help', 'dim');
+        w('More: ls -l, cat, echo, mkdir, touch, rm, cp, mv, head, wc, history, whoami, date', 'dim');
+        w('Tips: Tab completes names. Up and Down arrows bring back earlier commands. Ctrl+L clears the screen.', 'dim');
+        break;
+      case 'clear': scr.textContent = ''; break;
+      case 'pwd': w(pstr(cwd)); mark('pwd'); break;
+      case 'whoami': w('learner'); break;
+      case 'hostname': w('laptop'); break;
+      case 'date': w(new Date().toString().replace(/ GMT.*/, '')); break;
+      case 'history': hist.forEach(function (h, n) { w(('     ' + (n + 1)).slice(-5) + '  ' + h); }); break;
+      case 'exit': w('This practice terminal stays open. Use the reset button below to start fresh.', 'dim'); break;
+      case 'echo': w(args.join(' ')); break;
+      case 'ls': {
+        var long = flags.indexOf('l') > -1, all = flags.indexOf('a') > -1, targets = args.length ? args : [''], ok = true;
+        targets.forEach(function (tg, ti) {
+          var p = resolve(tg), n = nodeAt(p), items;
+          if (!n) { out("ls: cannot access '" + tg + "': No such file or directory", 'err'); ok = false; return; }
+          if (targets.length > 1) { if (ti) w(''); w(tg + ':'); }
+          if (n.type === 'file') items = [{ n: tg, node: n }];
+          else {
+            items = Object.keys(n.kids).filter(function (k) { return all || k[0] !== '.'; }).sort().map(function (k) { return { n: k, node: n.kids[k] }; });
+            if (all) items = [{ n: '.', node: n }, { n: '..', node: n }].concat(items);
+          }
+          if (long) {
+            if (n.type === 'dir') w('total ' + items.length * 4);
+            items.forEach(function (it) {
+              var d = it.node.type === 'dir', size = d ? 4096 : it.node.content.length;
+              wp([{ t: (d ? 'drwxr-xr-x' : '-rw-r--r--') + ' 1 learner learner ' + ('     ' + size).slice(-5) + ' ' + stamp(it.node.t) + ' ' }, { t: it.n, dir: d }], '');
+            });
+          } else if (items.length) {
+            wp(items.map(function (it) { var d = it.node.type === 'dir'; return { t: d ? it.n + '/' : it.n, dir: d }; }), '   ');
+          }
+        });
+        if (ok) mark('ls');
+        break;
+      }
+      case 'cd': {
+        if (a.length > 1) { out('bash: cd: too many arguments', 'err'); break; }
+        var tg2 = a[0], np;
+        if (!tg2 || tg2 === '~') np = HOMEP.slice(); else if (tg2 === '-') np = prevDir.slice(); else np = resolve(tg2);
+        var nd = nodeAt(np);
+        if (!nd) out('cd: no such folder: ' + tg2 + '. Try ls to see what is here.', 'err');
+        else if (nd.type === 'file') out('cd: ' + tg2 + ' is a file, not a folder', 'err');
+        else {
+          prevDir = cwd; cwd = np; if (tg2 === '-') w(pstr(cwd));
+          if (pstr(cwd) === '/home/learner/meridian_course') mark('cd');
+        }
+        break;
+      }
+      case 'cat':
+        if (!args.length) { out('cat: missing file name (try: cat hello.py)', 'err'); break; }
+        args.forEach(function (tg) { var s = readFile(tg, 'cat'); if (s !== null) linesOf(s).forEach(function (l) { w(l); }); });
+        break;
+      case 'head': {
+        var nn = 10, files = [];
+        for (i = 0; i < a.length; i++) {
+          if (a[i] === '-n' && a[i + 1]) { nn = parseInt(a[++i], 10) || 10; }
+          else if (/^-\d+$/.test(a[i])) nn = parseInt(a[i].slice(1), 10);
+          else files.push(a[i]);
+        }
+        if (!files.length) { out('head: missing file name', 'err'); break; }
+        files.forEach(function (tg) {
+          var s = readFile(tg, 'head'); if (s === null) return;
+          if (files.length > 1) w('==> ' + tg + ' <==');
+          linesOf(s).slice(0, nn).forEach(function (l) { w(l); });
+        });
+        break;
+      }
+      case 'wc':
+        if (!args.length) { out('wc: missing file name', 'err'); break; }
+        args.forEach(function (tg) {
+          var s = readFile(tg, 'wc'); if (s === null) return;
+          var ln = (s.match(/\n/g) || []).length, wd = s.split(/\s+/).filter(Boolean).length;
+          w(flags.indexOf('l') > -1 ? ln + ' ' + tg : '  ' + ln + '  ' + wd + ' ' + s.length + ' ' + tg);
+        });
+        break;
+      case 'mkdir':
+        if (!args.length) { out('mkdir: missing operand', 'err'); break; }
+        args.forEach(function (tg) {
+          var p = resolve(tg), pf = flags.indexOf('p') > -1, ex = nodeAt(p);
+          if (!p.length || ex) { if (ex && ex.type === 'dir' && pf) return; out("mkdir: cannot create directory '" + tg + "': File exists", 'err'); return; }
+          if (pf) {
+            var n = root, bad = false;
+            p.forEach(function (s) { if (bad) return; if (!(s in n.kids)) n.kids[s] = mkd(); n = n.kids[s]; if (n.type !== 'dir') { bad = true; out("mkdir: cannot create directory '" + tg + "': Not a directory", 'err'); } });
+            return;
+          }
+          var sp = split(p);
+          if (!sp.dir) { out("mkdir: cannot create directory '" + tg + "': No such file or directory", 'err'); return; }
+          sp.dir.kids[sp.name] = mkd();
+        });
+        break;
+      case 'touch':
+        if (!args.length) { out('touch: missing file operand', 'err'); break; }
+        args.forEach(function (tg) {
+          var p = resolve(tg), n = nodeAt(p);
+          if (n) { n.t = Date.now(); return; }
+          var sp = split(p);
+          if (!sp.dir) { out("touch: cannot touch '" + tg + "': No such file or directory", 'err'); return; }
+          sp.dir.kids[sp.name] = mkf('');
+        });
+        break;
+      case 'rm': {
+        var rec = /[rR]/.test(flags), force = flags.indexOf('f') > -1;
+        if (!args.length) { out('rm: missing operand', 'err'); break; }
+        args.forEach(function (tg) {
+          var p = resolve(tg), n = nodeAt(p);
+          if (!n) { if (!force) out("rm: cannot remove '" + tg + "': No such file or directory", 'err'); return; }
+          if (p.length < 3) { out("rm: refusing to remove '" + tg + "' in the practice terminal", 'err'); return; }
+          if (n.type === 'dir' && !rec) { out("rm: cannot remove '" + tg + "': Is a directory (use rm -r)", 'err'); return; }
+          if (isPrefix(p, cwd)) { out("rm: refusing to remove '" + tg + "' because you are inside it", 'err'); return; }
+          delete nodeAt(p.slice(0, -1)).kids[p[p.length - 1]];
+        });
+        break;
+      }
+      case 'cp':
+      case 'mv': {
+        if (args.length < 2) { out(c + (args.length ? ": missing destination file operand after '" + args[0] + "'" : ': missing file operand'), 'err'); break; }
+        var dst = args[args.length - 1], srcs = args.slice(0, -1), dp = resolve(dst), dn = nodeAt(dp), dIsDir = dn && dn.type === 'dir';
+        if (srcs.length > 1 && !dIsDir) { out(c + ": target '" + dst + "' is not a directory", 'err'); break; }
+        srcs.forEach(function (s) {
+          var sp = resolve(s), sn = nodeAt(sp);
+          if (!sn) { out(c + ": cannot stat '" + s + "': No such file or directory", 'err'); return; }
+          if (sp.length < 3) { out(c + ": refusing to touch '" + s + "' in the practice terminal", 'err'); return; }
+          if (sn.type === 'dir' && c === 'cp' && !/[rR]/.test(flags)) { out("cp: -r not specified; omitting directory '" + s + "'", 'err'); return; }
+          var tp = dIsDir ? dp.concat(sp[sp.length - 1]) : dp;
+          if (isPrefix(sp, tp) && sn.type === 'dir') { out(c + ": cannot copy or move '" + s + "' into itself", 'err'); return; }
+          if (c === 'mv' && isPrefix(sp, cwd)) { out("mv: refusing to move '" + s + "' because you are inside it", 'err'); return; }
+          if (eq(sp, tp)) { out(c + ": '" + s + "' and '" + dst + "' are the same file", 'err'); return; }
+          var ex = nodeAt(tp);
+          if (ex && (ex.type === 'dir' || sn.type === 'dir')) { out(c + ": cannot overwrite '" + dst + "'", 'err'); return; }
+          var tsp = split(tp);
+          if (!tsp.dir) { out(c + ": cannot create '" + dst + "': No such file or directory", 'err'); return; }
+          tsp.dir.kids[tsp.name] = c === 'cp' ? cloneNode(sn) : sn;
+          if (c === 'mv') delete nodeAt(sp.slice(0, -1)).kids[sp[sp.length - 1]];
+        });
+        break;
+      }
+      case 'python':
+      case 'python3':
+      case 'py': {
+        if (a[0] === '--version' || a[0] === '-V') { w('Python 3.12.3'); mark('ver'); break; }
+        if (!a.length) { out('That would start the REPL. You will try it in the next part of this page.', 'dim'); break; }
+        if (a[0] === '-c') {
+          if (a[1] === undefined) { out('Argument expected for the -c option', 'err'); break; }
+          runPy(a[1], '<string>', w); break;
+        }
+        if (a[0][0] === '-') { out('Unknown option: ' + a[0], 'err'); out('usage: ' + c + ' [option] ... [-c cmd | file] [arg] ...', 'err'); break; }
+        var fp = resolve(a[0]), fn = nodeAt(fp);
+        if (!fn) { out("python: can't open file '" + a[0] + "': [Errno 2] No such file or directory", 'err'); out('Tip: use pwd and ls to check which folder you are in.', 'dim'); }
+        else if (fn.type === 'dir') { out("python: can't find '__main__' module in '" + a[0] + "'", 'err'); }
+        else if (runPy(fn.content, a[0], w) && pstr(fp) === '/home/learner/meridian_course/hello.py') mark('run');
+        break;
+      }
+      default:
+        if (cmd.indexOf('(') > -1) {
+          var mm = cmd.match(/\(\s*([^)\s]*)/), tk = !mm || mm[1] === '' ? ')' : mm[1];
+          out("bash: syntax error near unexpected token `" + tk + "'", 'err');
+          out('That looks like Python code. This is the terminal prompt. Python code goes at the >>> prompt.', 'dim');
+        } else { out(c + ': command not found', 'err'); }
+    }
+  }
+
+  function run(cmd) {
+    echoLine(cmd);
+    try {
+      var t = tokenize(cmd);
+      if (t.err) { out('bash: ' + t.err, 'err'); }
+      else if (t.length) {
+        var redir = null, args = [], bad = false;
+        for (var i = 0; i < t.length; i++) {
+          if (t[i].op) {
+            var tg = t[i + 1];
+            if (!tg || tg.op) { out("bash: syntax error near unexpected token `newline'", 'err'); bad = true; break; }
+            redir = { mode: t[i].v, file: tg.v }; i++;
+          } else args.push(t[i].v);
+        }
+        if (!bad && args.length) {
+          var buf = null, w = out, wp = outParts;
+          if (redir) {
+            buf = [];
+            w = function (x) { buf.push(x); };
+            wp = function (parts, sep) { buf.push(parts.map(function (p) { return p.t; }).join(sep || '')); };
+          }
+          exec(args[0], args.slice(1), w, wp, cmd);
+          if (redir) {
+            var tp = resolve(redir.file), tn = nodeAt(tp), text = buf.length ? buf.join('\n') + '\n' : '';
+            if (tn && tn.type === 'dir') out('bash: ' + redir.file + ': Is a directory', 'err');
+            else {
+              var sp = tp.length ? split(tp) : { dir: null };
+              if (!sp.dir) out('bash: ' + redir.file + ': No such file or directory', 'err');
+              else if (tn) { tn.content = (redir.mode === '>>' ? tn.content : '') + text; tn.t = Date.now(); }
+              else sp.dir.kids[sp.name] = mkf(text);
+            }
+          }
+        }
+      }
+    } catch (err) { out('bash: something went wrong in the practice terminal. Try the reset button.', 'err'); }
+    prm.textContent = promptText(); renderTree(); scr.scrollTop = scr.scrollHeight;
+  }
+
+  /* --- tab completion --- */
+  function lcp(s) { var p = s[0]; s.forEach(function (x) { while (x.indexOf(p) !== 0) p = p.slice(0, -1); }); return p; }
+  function toEnd() { setTimeout(function () { var n = inp.value.length; try { inp.setSelectionRange(n, n); } catch (e) { /* ignore */ } }, 0); }
+  function complete() {
+    var v = inp.value, m = v.match(/^([\s\S]*?)(\S*)$/), head = m[1], word = m[2], cands = [], base = '', part = word, listing = [];
+    if (head.trim() === '') {
+      cands = CMDS.filter(function (c) { return c.indexOf(word) === 0; }); listing = cands.map(function (c) { return { t: c }; });
+    } else {
+      var sl = word.lastIndexOf('/'); base = sl > -1 ? word.slice(0, sl + 1) : ''; part = word.slice(sl + 1);
+      var dn = nodeAt(resolve(base));
+      if (!dn || dn.type !== 'dir') return;
+      Object.keys(dn.kids).sort().forEach(function (k) {
+        if (k.indexOf(part) === 0 && (part[0] === '.' || k[0] !== '.')) { var d = dn.kids[k].type === 'dir'; cands.push(d ? k + '/' : k); listing.push({ t: d ? k + '/' : k, dir: d }); }
+      });
+    }
+    if (!cands.length) return;
+    var cp = lcp(cands);
+    if (cands.length === 1) { inp.value = head + base + cp + (cp.slice(-1) === '/' ? '' : ' '); lastTab = null; }
+    else if (cp.length > part.length) { inp.value = head + base + cp; lastTab = null; }
+    else if (lastTab === v) { echoLine(v); outParts(listing, '   '); }
+    else { lastTab = v; }
+    toEnd();
+  }
+
+  function termStart() {
+    scr.textContent = ''; root = buildFS(); cwd = HOMEP.slice(); prevDir = HOMEP.slice(); tasksDone = {}; hist = []; hi = 0; draft = ''; lastTab = null;
+    $$('#termTasks li').forEach(function (li) { li.classList.remove('done'); $('.ck', li).textContent = ''; });
+    out('Welcome to the practice terminal. Type help to see what you can do.', 'dim');
+    out('Tip: press Tab to complete a name, and the Up arrow to repeat a command.', 'dim');
+    prm.textContent = promptText(); renderTree(); inp.value = '';
+  }
+  inp.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') lastTab = null;
+    if (e.key === 'Enter') { var v = inp.value; inp.value = ''; draft = ''; if (v.trim()) { hist.push(v); } hi = hist.length; run(v); }
+    else if (e.key === 'ArrowUp') { if (hi === hist.length) draft = inp.value; if (hi > 0) { hi--; inp.value = hist[hi]; } e.preventDefault(); toEnd(); }
+    else if (e.key === 'ArrowDown') { if (hi < hist.length - 1) { hi++; inp.value = hist[hi]; } else { hi = hist.length; inp.value = draft; } e.preventDefault(); toEnd(); }
+    else if (e.key === 'Tab') { if (inp.value.trim() !== '') { e.preventDefault(); complete(); } }
+    else if (e.ctrlKey && (e.key === 'l' || e.key === 'L')) { e.preventDefault(); scr.textContent = ''; }
+    else if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); inp.value = ''; }
+    else if (e.ctrlKey && (e.key === 'c' || e.key === 'C') && inp.selectionStart === inp.selectionEnd) { e.preventDefault(); echoLine(inp.value + '^C'); inp.value = ''; hi = hist.length; }
+  });
+  $('#term').addEventListener('click', function (e) { if (!window.getSelection || String(window.getSelection()) === '') inp.focus(); });
+  $('#termReset').addEventListener('click', termStart);
+  termStart();
+
+  /* ---------- guided REPL ---------- */
+  function norm(s) { var o = '', q = null; for (var i = 0; i < s.length; i++) { var ch = s[i]; if (q) { o += ch; if (ch === q) q = null; } else if (ch === '"' || ch === "'") { q = ch; o += '"'; } else if (ch !== ' ' && ch !== '\t') { o += ch; } } return o.replace(/'/g, '"'); }
+  var STEPS = [
+    { code: '2 + 3', out: '5', why: 'Read, Eval, Print: Python read your line, worked out the answer, and printed it. The REPL works like a calculator that understands much more than numbers.' },
+    { code: 'name = "Meridian"', out: '', why: 'Nothing was printed. Storing a value is not something Python needs to announce. It quietly remembered the value under the name "name". Notice we did not declare a type.' },
+    { code: 'name', out: "'Meridian'", why: 'Typing a name on its own shows its value. This is the REPL remembering: you set name on the previous line and it is still here. Python shows text with quote marks to remind you it is text.' },
+    { code: 'name + " Retail"', out: "'Meridian Retail'", why: 'Adding text to text joins it together. The REPL is a great place to try small ideas like this.' },
+    { code: 'len(name)', out: '8', why: 'len() counts the characters. M-e-r-i-d-i-a-n is eight.' },
+    { code: 'type(name)', out: "<class 'str'>", why: 'You never said name was text. Python worked out the type, str (string), by itself.' },
+    { code: '5 + "5"', out: 'ERR', why: 'Python cannot add a number and text, so it printed an error. Read the last line first. Importantly, the REPL did not stop. You simply get a new prompt.' },
+    { code: 'name', out: "'Meridian'", why: 'Even after the error, name is still remembered. Errors in the REPL are safe.' },
+    { code: 'exit()', out: 'EXIT', why: 'exit() leaves the REPL. You are back at the terminal\u2019s own prompt, where you type terminal commands again.' }
+  ];
+  var rs = $('#replScreen'), ri = $('#replInput'), rh = $('#replHint'), rx = $('#replExplain'), step = 0, finished = false;
+  function rout(t, cls) { var l = document.createElement('div'); l.className = 'line' + (cls ? ' ' + cls : ''); l.textContent = t; rs.appendChild(l); rs.scrollTop = rs.scrollHeight; }
+  function replStart() {
+    rs.textContent = ''; step = 0; finished = false; rx.style.display = 'none'; ri.disabled = false;
+    rout('Python 3.12.3 (practice session)', 'dim'); rout('Type "exit()" when you are done.', 'dim');
+    prompt();
+  }
+  function prompt() {
+    if (step >= STEPS.length) { finished = true; rh.textContent = ''; rh.className = 'hint good'; rh.textContent = 'You finished the guided REPL. You are back at the terminal prompt.'; ri.disabled = true; return; }
+    rh.className = 'hint'; rh.innerHTML = 'Step ' + (step + 1) + ' of ' + STEPS.length + ': type <code>' + esc(STEPS[step].code) + '</code>';
+  }
+  function replRun(v) {
+    var s = STEPS[step];
+    var l = document.createElement('div'); l.className = 'line'; l.innerHTML = '<span class="p">&gt;&gt;&gt;</span> ' + esc(v); rs.appendChild(l);
+    if (norm(v) === norm(s.code)) {
+      if (s.out === 'ERR') { rout('Traceback (most recent call last):', 'err'); rout('  File "<stdin>", line 1, in <module>', 'err'); rout("TypeError: unsupported operand type(s) for +: 'int' and 'str'", 'err'); }
+      else if (s.out === 'EXIT') { rout('', ''); rout('learner@laptop:~$', 'p'); }
+      else if (s.out !== '') { rout(s.out); }
+      rx.style.display = 'block'; rx.innerHTML = '<strong class="t">What just happened</strong>' + esc(s.why);
+      step++; prompt();
+    } else {
+      rout('That is not quite the line for this step. Check the spelling, brackets and quote marks.', 'err');
+      rh.className = 'hint bad'; rh.innerHTML = 'Try again: type <code>' + esc(s.code) + '</code>';
+    }
+    rs.scrollTop = rs.scrollHeight;
+  }
+  ri.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !finished) { var v = ri.value; ri.value = ''; if (v.trim()) replRun(v); } });
+  $('#repl').addEventListener('click', function () { ri.focus(); });
+  $('#replFill').addEventListener('click', function () { if (!finished) { ri.value = STEPS[step].code; ri.focus(); } });
+  $('#replReset').addEventListener('click', replStart);
+  replStart();
+
+  /* ---------- indentation demo ---------- */
+  var ic = $('#indCode'), io = $('#indOut');
+  $('#indWrong').addEventListener('click', function () {
+    ic.textContent = 'if True:\nprint("Hello")';
+    io.textContent = 'IndentationError: expected an indented block after \'if\' statement on line 1\n\nThe line after the colon was not indented, so Python does not know it belongs to the if.';
+  });
+  $('#indRight').addEventListener('click', function () {
+    ic.textContent = 'if True:\n    print("Hello")';
+    io.textContent = 'Hello\n\nFour spaces at the start of the second line tell Python it belongs inside the if.';
+  });
+
+  /* ---------- dynamic typing demo ---------- */
+  $$('#dynChips .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      $$('#dynChips .chip').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      c.setAttribute('aria-pressed', 'true');
+      $('#dynOut').textContent = '>>> ' + c.dataset.v + '\n>>> type(x)\n<class \'' + c.dataset.t + '\'>';
+      $('#dynOut').style.whiteSpace = 'pre-wrap';
+    });
+  });
+
+  /* ---------- data types ---------- */
+  var TYPES = [
+    ['42', 'int', 'A whole number, positive or negative. Used for counts, such as the number of days.'],
+    ['3.14', 'float', 'A number with a decimal point. Used for measurements and prices.'],
+    ['"C-1002"', 'str', 'Text ("string"), always inside quote marks. Single quotes work too. Used for identifiers, names and notes. Note that "5" in quotes is text, not a number.'],
+    ['True', 'bool', 'A yes-or-no value. Only two exist: True and False, written with a capital letter. Used for answers to questions such as "is the order open?".'],
+    ['None', 'NoneType', 'Means "no value here". It is not zero and not empty text. A case with no note could hold None.']
+  ];
+  $$('#typeChips .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      $$('#typeChips .chip').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      c.setAttribute('aria-pressed', 'true');
+      var t = TYPES[+c.dataset.i];
+      $('#typeOut').innerHTML = '<code>type(' + esc(t[0]) + ')</code> gives <code>&lt;class \'' + esc(t[1]) + '\'&gt;</code><br>' + esc(t[2]);
+    });
+  });
+
+  /* ---------- quizzes ---------- */
+  function quiz(el, items, scoreEl) {
+    var answered = 0, right = 0;
+    items.forEach(function (it, qi) {
+      var q = document.createElement('div'); q.className = 'q';
+      var p = document.createElement('p'); p.className = 'qt'; p.textContent = (qi + 1) + '. ' + it.q; q.appendChild(p);
+      var fb = document.createElement('div'); fb.className = 'fb';
+      var btns = [];
+      it.o.forEach(function (txt, oi) {
+        var b = document.createElement('button'); b.className = 'opt'; b.textContent = txt; btns.push(b);
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.disabled = true; });
+          answered++;
+          if (oi === it.a) { b.classList.add('right'); right++; fb.textContent = 'Correct. ' + it.e; fb.style.color = 'var(--ok)'; }
+          else { b.classList.add('wrong'); btns[it.a].classList.add('right'); fb.textContent = 'Not quite. ' + it.e; fb.style.color = 'var(--bad)'; }
+          if (scoreEl && answered === items.length) { scoreEl.textContent = 'You got ' + right + ' of ' + items.length + '. ' + (right === items.length ? 'Great work.' : 'Re-read the sections for any you missed. You can reload this page to try again.'); }
+        });
+        q.appendChild(b);
+      });
+      q.appendChild(fb); el.appendChild(q);
+    });
+  }
+  quiz($('#structQuiz'), [
+    { q: 'You want to store a case as labelled values: case_id, status and note_id.', o: ['List', 'Tuple', 'Dictionary', 'Set'], a: 2, e: 'A dictionary stores labelled values as key: value pairs.' },
+    { q: 'You want a group of statuses with no repeats, to check quickly whether one is in it.', o: ['List', 'Set', 'Tuple', 'Dictionary'], a: 1, e: 'A set keeps each value once and is built for "is it in here?" checks.' },
+    { q: 'You want a pair of ids that must never be changed after you create it.', o: ['Tuple', 'List', 'Set', 'Dictionary'], a: 0, e: 'A tuple is fixed once it is created.' }
+  ]);
+  quiz($('#finalQuiz'), [
+    { q: 'What does REPL stand for?', o: ['Run, Edit, Print, Leave', 'Read, Eval, Print, Loop', 'Repeat, Execute, Print, Log', 'Read, Edit, Process, Loop'], a: 1, e: 'Python reads a line, evaluates it, prints the result, and loops back to wait for the next line.' },
+    { q: 'You type python on its own (no file name) and press Enter. What do you see?', o: ['A new prompt that looks like >>>', 'The terminal closes', 'A list of your files', 'Nothing happens'], a: 0, e: 'The >>> prompt means you are in the REPL and Python is listening.' },
+    { q: 'In Python you must declare a variable\u2019s type before you use it.', o: ['True', 'False'], a: 1, e: 'Python works out the type from the value. You just write x = 5.' },
+    { q: 'How does Python know which lines belong inside a block, like under an if?', o: ['Curly braces', 'Semicolons', 'Indentation', 'Capital letters'], a: 2, e: 'Indentation is part of Python\u2019s grammar. Four spaces is the standard.' },
+    { q: 'Which structure stores key: value pairs?', o: ['List', 'Tuple', 'Set', 'Dictionary'], a: 3, e: 'A dictionary reads values by key. Cases in this course are dictionaries.' },
+    { q: 'In a terminal, what does cd .. do?', o: ['Deletes the current folder', 'Moves up one folder', 'Lists the files', 'Starts Python'], a: 1, e: 'Two dots mean the parent folder, so cd .. moves up one level.' },
+    { q: 'You are at the terminal prompt and type 2 + 3. What is most likely to happen?', o: ['It prints 5', 'You get an error, because that is Python code and not a terminal command', 'It starts Python', 'It saves a file'], a: 1, e: 'Python code belongs at the >>> prompt. The terminal prompt expects terminal commands.' }
+  ], $('#finalScore'));
+
+  /* ---------- final checklist ---------- */
+  $$('#finalChecks li').forEach(function (li) {
+    li.style.cursor = 'pointer';
+    li.addEventListener('click', function () { var on = li.classList.toggle('done'); $('.ck', li).textContent = on ? '\u2713' : ''; });
+  });
+
+  /* ---------- highlight current nav item while scrolling ---------- */
+  try {
+    var secs = $$('section.card'), links = $$('nav a');
+    window.addEventListener('scroll', function () {
+      var cur = secs[0].id;
+      secs.forEach(function (s) { if (s.getBoundingClientRect().top < 160) cur = s.id; });
+      links.forEach(function (a) { a.style.fontWeight = a.dataset.s === cur ? '700' : '400'; });
+    }, { passive: true });
+  } catch (e) { /* ignore */ }
+})();
+</script>
+</body>
+</html>
