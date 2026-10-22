@@ -193,6 +193,26 @@
   
   footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 30px; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ---- VS Code window map ---- */
+  .vsmap { display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 2fr); grid-template-rows: auto auto auto;
+    grid-template-areas: "act exp edit" "act exp term" "status status status"; gap: 6px; margin: 12px 0; padding: 8px;
+    background: #2b2620; border-radius: 14px; }
+  .vsmap .vp { font: inherit; text-align: left; border: 2px solid transparent; border-radius: 10px; padding: 8px 10px; cursor: pointer; background: #3a342c; color: #f1e8da; min-width: 0; }
+  .vsmap .vp:hover { border-color: #d98a4e; }
+  .vsmap .vp[aria-pressed="true"] { border-color: var(--accent); background: #5a3a28; }
+  .vsmap .vl { display: block; font-size: 13px; font-weight: 700; color: #f0b46a; margin-bottom: 4px; }
+  .vsmap .vm, .vsmap .vi { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.5; color: #d7cbb8; overflow-wrap: anywhere; }
+  .vsmap .vp-act { grid-area: act; text-align: center; padding: 8px 4px; } .vsmap .vp-act .vl { font-size: 11px; }
+  .vsmap .vp-exp { grid-area: exp; min-height: 120px; }
+  .vsmap .vp-edit { grid-area: edit; min-height: 70px; background: #231f1a; }
+  .vsmap .vp-term { grid-area: term; min-height: 70px; background: #1b1814; }
+  .vsmap .vp-status { grid-area: status; background: #7a3f1d; padding: 5px 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .vsmap .vp-status .vl { margin: 0; color: #fff; } .vsmap .vp-status .vm { color: #fff; }
+  @media (max-width: 520px) { .vsmap { grid-template-columns: 48px minmax(0, 1fr); grid-template-areas: "act exp" "act edit" "act term" "status status"; } }
+  .twocol > *, .cardgrid > * { min-width: 0; }
+  .tasks li .tx { min-width: 0; overflow-wrap: anywhere; }
+  .panel pre.mono { white-space: pre-wrap; overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
@@ -200,15 +220,16 @@
 <div class="topbar">
   <div class="wrap">
     <div class="progress" aria-hidden="true"><div id="bar"></div></div>
-    <p class="pct" id="pct">Progress: 0 of 7 sections marked done</p>
+    <p class="pct" id="pct">Progress: 0 of 8 sections marked done</p>
     <nav id="nav" aria-label="Sections">
       <a href="#s1" data-s="s1">1 Welcome</a>
       <a href="#s2" data-s="s2">2 Python</a>
-      <a href="#s3" data-s="s3">3 Install</a>
-      <a href="#s4" data-s="s4">4 Terminal</a>
-      <a href="#s5" data-s="s5">5 Files &amp; REPL</a>
-      <a href="#s6" data-s="s6">6 Basics</a>
-      <a href="#s7" data-s="s7">7 Check yourself</a>
+      <a href="#s3" data-s="s3">3 Install Python</a>
+      <a href="#s4" data-s="s4">4 VS Code</a>
+      <a href="#s5" data-s="s5">5 Terminal</a>
+      <a href="#s6" data-s="s6">6 Files &amp; REPL</a>
+      <a href="#s7" data-s="s7">7 Basics</a>
+      <a href="#s8" data-s="s8">8 Check yourself</a>
     </nav>
   </div>
 </div>
@@ -218,10 +239,11 @@
 <header class="hero">
   <div class="kicker">FDE Module 2 &middot; Pre-read for Class 1</div>
   <h1>Meet Python</h1>
-  <p class="lead">A gentle first look at Python, your terminal and the Python scratchpad, before Class 1 begins.</p>
+  <p class="lead">Install Python and VS Code, take a first look at the terminal and the Python scratchpad, and get ready for Class 1.</p>
   <div class="pills">
-    <span class="pill">About 45 to 60 minutes</span>
+    <span class="pill">About 60 to 75 minutes</span>
     <span class="pill">No experience needed</span>
+    <span class="pill">Install two tools</span>
     <span class="pill">Interactive practice inside</span>
   </div>
 </header>
@@ -230,7 +252,7 @@
 <section class="card" id="s1">
   <h2><span class="num">1.</span> Welcome</h2>
   <p>In Module 2 you will build the <strong>Meridian Case Intake Workbench</strong>: a small Python application that helps a support team see which customer cases need attention. Python is the tool you will use all the way through.</p>
-  <p>This pre-read is only an introduction. It will not teach you to write programs. It will help you get your computer ready, feel comfortable in the places where Python lives, and recognise the basic shapes you will meet in Class 1.</p>
+  <p>This pre-read is only an introduction. It will not teach you to write programs. It will help you get your computer ready (Python and VS Code), feel comfortable in the places where Python lives, and recognise the basic shapes you will meet in Class 1.</p>
 
   <div class="twocol">
     <div class="panel">
@@ -238,7 +260,8 @@
       <ul>
         <li>Learn what Python is, and how it differs from other languages</li>
         <li>Install Python on your computer</li>
-        <li>Learn what a terminal is and use one</li>
+        <li>Install <strong>VS Code</strong>, the editor we use in class, and open your first project folder in it</li>
+        <li>Learn what a terminal is and use one, including the one inside VS Code</li>
         <li>Learn what the Python REPL is and try it</li>
         <li>Meet Python's basic data types and data structures</li>
       </ul>
@@ -255,7 +278,7 @@
   </div>
 
   <div class="callout tip"><strong class="t">How to use this page</strong>
-    Go in order. Type in the practice boxes, because typing helps you remember. Use the <em>Mark as done</em> button at the end of each section to track your progress. If a step fails, write down what you saw and tell your instructor. Please do not spend more than 15 minutes stuck on any one thing.
+    Go in order. Type in the practice boxes, because typing helps you remember. Use the <em>Mark as done</em> button at the end of each section to track your progress. If a step fails, write down what you saw and tell your instructor. Section 4 (VS Code) is the most important one to finish <strong>before</strong> class, together with Section 3 (Python). Please do not spend more than 15 minutes stuck on any one thing.
   </div>
   <div class="donebar"><button class="donebtn" data-done="s1" aria-pressed="false">Mark as done</button></div>
 </section>
@@ -279,7 +302,7 @@
     <tr><td>Capital letters</td><td>Usually matter</td><td>Always matter: <code>Name</code> and <code>name</code> are different</td></tr>
   </table>
   </div>
-  <p>The two big ones, indentation and no type declarations, get their own interactive demos in Section 6.</p>
+  <p>The two big ones, indentation and no type declarations, get their own interactive demos in Section 7.</p>
   <div class="callout tip"><strong class="t">Two things to remember</strong>
     In Python, <strong>indentation is part of the grammar</strong>, not decoration. And you <strong>do not declare types</strong>; Python works them out from the value you give it.
   </div>
@@ -289,6 +312,7 @@
 <!-- ================= 3 INSTALL ================= -->
 <section class="card" id="s3">
   <h2><span class="num">3.</span> Install Python</h2>
+  <p class="small muted">Step 1 of 2 for your computer. Section 4 installs VS Code, the editor that you will use to write and run this Python.</p>
   <p>Python is free. To use it on your own computer, you install it once. You need <strong>Python 3</strong>, and the course uses version <span class="placeholder">Python 3.12</span> or newer.</p>
   <div class="callout warn"><strong class="t">Prepared environment</strong>
     If your instructor has given you a prepared environment (a ready-made workspace), you can use that instead and skip the install. Installing Python yourself is still recommended, because you can practise on your own machine.
@@ -307,7 +331,7 @@
         <li>Download the Windows installer from the link above.</li>
         <li>Run it. On the <strong>first screen</strong>, tick <strong>"Add python.exe to PATH"</strong> before you click anything else. This step is easy to miss and it matters.</li>
         <li>Click <strong>Install Now</strong> and wait for "Setup was successful".</li>
-        <li>Close any open terminal, open a new <strong>PowerShell</strong> window (see Section 4), and run <code>python --version</code>. If it is not found, try <code>py --version</code>.</li>
+        <li>Close any open terminal, open a new <strong>PowerShell</strong> window (see Section 5), and run <code>python --version</code>. If it is not found, try <code>py --version</code>.</li>
       </ol>
     </div>
 
@@ -315,7 +339,7 @@
       <ol class="steps">
         <li>Download the macOS installer (a <code>.pkg</code> file) from the link above.</li>
         <li>Open it and follow the prompts, accepting the defaults.</li>
-        <li>Open <strong>Terminal</strong> (see Section 4) and run <code>python3 --version</code>.</li>
+        <li>Open <strong>Terminal</strong> (see Section 5) and run <code>python3 --version</code>.</li>
         <li>On a new Mac, the first time you run <code>python3</code> it may ask you to install "command line developer tools". Click <strong>Install</strong> and wait. This is normal.</li>
         <li>On Mac, use <code>python3</code> instead of <code>python</code> in commands.</li>
       </ol>
@@ -342,7 +366,7 @@ sudo apt install python3 python3-venv python3-pip</pre></div>
 
 # You should see something like:
 # Python 3.12.3</pre></div>
-  <p class="small muted">Not sure how to open a terminal yet? That is the next section. Come back to this check afterwards.</p>
+  <p class="small muted">Not sure how to open a terminal yet? Install VS Code in Section 4 first, then open its terminal (Section 5). Come back to this check afterwards.</p>
 
   <h3>If something goes wrong</h3>
   <div class="tablewrap">
@@ -356,9 +380,155 @@ sudo apt install python3 python3-venv python3-pip</pre></div>
   <div class="donebar"><button class="donebtn" data-done="s3" aria-pressed="false">Mark as done</button></div>
 </section>
 
-<!-- ================= 4 TERMINAL ================= -->
+<!-- ================= 4 VS CODE ================= -->
 <section class="card" id="s4">
-  <h2><span class="num">4.</span> The terminal</h2>
+  <h2><span class="num">4.</span> Install VS Code and open your first project</h2>
+  <p>In Class 1 you will write Python in <strong>VS Code</strong> (short for Visual Studio Code). It is a free code editor from Microsoft. Python is the engine that runs your instructions. VS Code is the workshop where you write them. They are two separate installs, and you need both. Allow about 20 minutes for this section.</p>
+
+  <div class="callout tip"><strong class="t">Why VS Code?</strong>
+    One window holds the three things you need: a list of your files, a place to type code, and a terminal to run it. You will not jump between programs. In class your instructor works in the same window you do, so you can follow along step by step.
+  </div>
+
+  <h3>4.1 Get to know the window</h3>
+  <p>This is a simplified picture of VS Code. Click each part to see what it is for.</p>
+  <div class="vsmap" id="vsMap" role="group" aria-label="Parts of the VS Code window">
+    <button type="button" class="vp vp-act" data-p="act" aria-pressed="false"><span class="vl">Activity bar</span><span class="vi">&#9638;<br>&#9633;</span></button>
+    <button type="button" class="vp vp-exp" data-p="exp" aria-pressed="false"><span class="vl">Explorer</span><span class="vm">meridian_course<br>&nbsp;&nbsp;hello.py</span></button>
+    <button type="button" class="vp vp-edit" data-p="edit" aria-pressed="false"><span class="vl">Editor</span><span class="vm"># My first Python file<br>print("Meridian case batch received")</span></button>
+    <button type="button" class="vp vp-term" data-p="term" aria-pressed="false"><span class="vl">Terminal</span><span class="vm">&gt; python hello.py<br>Meridian case batch received</span></button>
+    <button type="button" class="vp vp-status" data-p="status" aria-pressed="false"><span class="vl">Status bar</span><span class="vm">Python 3.12.3</span></button>
+  </div>
+  <div class="readout" id="vsOut">Click a part of the window above.</div>
+
+  <h3>4.2 Install VS Code</h3>
+  <p>Download from: <span class="placeholder"><a href="https://code.visualstudio.com/download" style="text-decoration: none; color: inherit;">code.visualstudio.com/download</a></span>. Choose your system:</p>
+  <div class="tabs" data-tabs="vsinstall">
+    <div class="tablist" role="tablist" aria-label="Operating system">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac</button>
+      <button role="tab" aria-selected="false" data-tab="lin">Linux</button>
+    </div>
+    <div class="tabpanel active" data-panel="win">
+      <ol class="steps">
+        <li>On the download page, click the <strong>Windows</strong> button. A file called something like <code>VSCodeUserSetup-x64-&hellip;.exe</code> is saved in your Downloads folder.</li>
+        <li>Double-click that file to run it. Accept the agreement and click <strong>Next</strong> through the folder screen.</li>
+        <li>On the screen called <strong>Select Additional Tasks</strong>, keep <strong>"Add to PATH"</strong> ticked. Also tick the two <strong>"Add Open with Code action"</strong> boxes. They let you right-click a folder and open it straight in VS Code.</li>
+        <li>Click <strong>Next</strong>, then <strong>Install</strong>, then <strong>Finish</strong> with "Launch Visual Studio Code" ticked.</li>
+        <li>Next time, press the <strong>Windows key</strong>, type <strong>Visual Studio Code</strong> and press Enter.</li>
+      </ol>
+    </div>
+    <div class="tabpanel" data-panel="mac">
+      <ol class="steps">
+        <li>On the download page, click the <strong>Mac</strong> button. A zip file is saved in your Downloads folder. The "Universal" version works on every Mac.</li>
+        <li>Open Downloads and double-click the zip. A purple <strong>Visual Studio Code</strong> app appears.</li>
+        <li><strong>Drag the app into your Applications folder.</strong> Do not skip this. If it stays in Downloads, it can disappear later.</li>
+        <li>Open Applications and double-click <strong>Visual Studio Code</strong>. If macOS says the app was downloaded from the internet, click <strong>Open</strong>.</li>
+        <li>Next time, press <strong>Command + Space</strong>, type <strong>Visual Studio Code</strong> and press Enter.</li>
+      </ol>
+    </div>
+    <div class="tabpanel" data-panel="lin">
+      <ol class="steps">
+        <li>Easiest on most systems, if you have <code>snap</code>: run the command below, then start it from your applications menu or by typing <code>code</code>.</li>
+      </ol>
+      <div class="codeblock"><div class="label">Any system with snap</div><button class="copy">Copy</button><pre>sudo snap install code --classic</pre></div>
+      <p>Or download the right package from the download page, open a terminal in your Downloads folder, and install it:</p>
+      <div class="codeblock"><div class="label">Ubuntu or Debian (the .deb file)</div><button class="copy">Copy</button><pre>cd ~/Downloads
+sudo apt install ./code_*.deb</pre></div>
+      <div class="codeblock"><div class="label">Fedora (the .rpm file)</div><button class="copy">Copy</button><pre>cd ~/Downloads
+sudo dnf install ./code-*.rpm</pre></div>
+    </div>
+  </div>
+  <p>When VS Code opens, you may see a Welcome tab and a few small pop-ups. You can close the Welcome tab and ignore pop-ups for now.</p>
+  <p><b><em> Note: Make sure to keep your VS Code ready before you join the session. Install Visual Studio Code, not Visual Studio (a different, much larger product).”</em></b></p>
+
+  <h3>4.3 Add the Python extension</h3>
+  <p>An <strong>extension</strong> adds a skill to VS Code. The Python extension teaches it to understand Python files, colour your code and find your Python.</p>
+  <ol class="steps">
+    <li>Click the <strong>Extensions</strong> icon in the Activity bar on the left. It looks like four small squares. (Shortcut: <strong>Ctrl + Shift + X</strong>, or <strong>Command + Shift + X</strong> on a Mac.)</li>
+    <li>Type <strong>Python</strong> in the search box.</li>
+    <li>Choose the one whose publisher is <strong>Microsoft</strong>. It has a very large number of downloads and a blue tick next to the name.</li>
+    <li>Click <strong>Install</strong> and wait until the button changes. A couple of helper extensions may install with it. That is normal.</li>
+  </ol>
+
+  <h3>4.4 Make a project folder and open it</h3>
+  <p>A <strong>project</strong> is just a folder that holds your files. You will use one folder for the whole course.</p>
+  <ol class="steps">
+    <li>In VS Code, choose <strong>File</strong>, then <strong>Open Folder&hellip;</strong>. (On some Macs the menu item is <strong>File</strong>, then <strong>Open&hellip;</strong>.)</li>
+    <li>Go to a place that is easy to find, such as <strong>Documents</strong>. Use the <strong>New Folder</strong> button in the window to create a folder named <code>meridian_course</code>, select it, and click <strong>Open</strong> (or <strong>Select Folder</strong>).</li>
+    <li>If VS Code asks <strong>"Do you trust the authors of the files in this folder?"</strong>, click <strong>Yes</strong>. It is your own folder.</li>
+    <li>Look at the Explorer on the left. You should see the name <code>MERIDIAN_COURSE</code> at the top. The folder is empty, which is right.</li>
+  </ol>
+
+  <h3>4.5 Create and save your first file</h3>
+  <ol class="steps">
+    <li>In the Explorer, hover over the folder name and click the <strong>New File</strong> icon (a page with a plus sign). Type <code>hello.py</code> and press Enter. The file opens in the editor.</li>
+    <li>Type or paste these two lines into the editor:</li>
+  </ol>
+  <div class="codeblock"><div class="label">hello.py</div><button class="copy">Copy</button><pre># My first Python file
+print("Meridian case batch received")</pre></div>
+  <ol class="steps" style="counter-reset: s 2">
+    <li><strong>Save the file:</strong> <strong>Ctrl + S</strong> (<strong>Command + S</strong> on a Mac). Before you save, there is a <strong>dot</strong> on the file's tab. After you save, the dot becomes an X. A dot means "not saved yet".</li>
+    <li>Look at the bottom-right corner, the status bar. It should show a Python version, such as <strong>3.12</strong>. If it says <strong>Select Interpreter</strong>, click it and choose the Python 3.12 (or newer) that you installed in Section 3.</li>
+  </ol>
+  <div class="callout warn"><strong class="t">The habit that saves the most time: save before you run</strong>
+    If the dot is still on the tab, Python will run the old, saved version of your file and the output will not change. When a result looks wrong or stale, check for the dot first. You can also turn on <strong>File, then Auto Save</strong> to save for you.
+  </div>
+
+  <h3>4.6 Run it from VS Code's terminal</h3>
+  <ol class="steps">
+    <li>Choose <strong>Terminal</strong>, then <strong>New Terminal</strong>. (Shortcut: <strong>Ctrl + `</strong>, the key under Esc.) A terminal opens at the bottom, already inside your <code>meridian_course</code> folder. You will meet terminals properly in Section 5.</li>
+    <li>Type the command for your system and press Enter:</li>
+  </ol>
+  <div class="codeblock"><div class="label">Type this in the VS Code terminal</div><button class="copy">Copy</button><pre>python hello.py
+# Mac and Linux: python3 hello.py
+# Windows, if "python" is not found: py hello.py
+
+# You should see:
+# Meridian case batch received</pre></div>
+  <p>That is the whole loop you will use all course: <strong>write in the editor, save, run in the terminal, read the output.</strong></p>
+  <p class="small muted">VS Code also has a small <strong>Play (&#9654;)</strong> button at the top right of the editor that runs the file. In class we type the command instead, because it works the same on every machine and teaches you what is really happening.</p>
+
+  <h3>Four shortcuts worth knowing</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you want</th><th>Windows and Linux</th><th>Mac</th></tr>
+    <tr><td>Save the file</td><td><code>Ctrl + S</code></td><td><code>Command + S</code></td></tr>
+    <tr><td>Show or hide the terminal</td><td><code>Ctrl + `</code></td><td><code>Control + `</code></td></tr>
+    <tr><td>Open Extensions</td><td><code>Ctrl + Shift + X</code></td><td><code>Command + Shift + X</code></td></tr>
+    <tr><td>Make text bigger or smaller</td><td><code>Ctrl + +</code> and <code>Ctrl + -</code></td><td><code>Command + +</code> and <code>Command + -</code></td></tr>
+  </table>
+  </div>
+
+  <h3>Check that everything worked</h3>
+  <ul class="tasks" id="vsChecks">
+    <li data-check="a"><span class="ck"></span>VS Code opens from the Start menu, Applications or the applications menu</li>
+    <li data-check="b"><span class="ck"></span>The Python extension (publisher: Microsoft) shows as installed</li>
+    <li data-check="c"><span class="ck"></span>I opened my <code>meridian_course</code> folder and can see it in the Explorer</li>
+    <li data-check="d"><span class="ck"></span>I created <code>hello.py</code> and saved it (no dot on the tab)</li>
+    <li data-check="e"><span class="ck"></span>In the VS Code terminal, <code>python hello.py</code> prints <code>Meridian case batch received</code></li>
+  </ul>
+  <p class="small muted">Click an item to tick it.</p>
+
+  <h3>If something goes wrong</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you see</th><th>Likely cause and fix</th></tr>
+    <tr><td>"python is not recognised" in the VS Code terminal (Windows)</td><td>Python was installed after VS Code was opened, or "Add python.exe to PATH" was not ticked. Close <strong>all</strong> VS Code windows, open VS Code again, open a new terminal and retry. Try <code>py hello.py</code>. If it still fails, run the Python installer again, choose <em>Modify</em> or <em>Repair</em>, and tick the PATH box.</td></tr>
+    <tr><td>"command not found: python" (Mac or Linux)</td><td>Use <code>python3 hello.py</code>.</td></tr>
+    <tr><td>The terminal prompt shows the wrong folder, or "can't open file hello.py"</td><td>VS Code was opened without your folder. Choose File, then Open Folder, pick <code>meridian_course</code>, then close the old terminal (the bin icon) and open a new one.</td></tr>
+    <tr><td>The Python extension does not appear in the search</td><td>Search for exactly <strong>Python</strong> and look for the publisher <strong>Microsoft</strong>. Check your internet connection.</td></tr>
+    <tr><td>The output did not change after I edited the file</td><td>The file is not saved. Look for the dot on the tab and press Ctrl + S (Command + S on a Mac).</td></tr>
+    <tr><td>Mac: "Visual Studio Code cannot be opened" or "damaged"</td><td>Make sure the app is in the <strong>Applications</strong> folder, not Downloads. Then right-click the app, choose <strong>Open</strong>, and confirm.</td></tr>
+    <tr><td>My laptop is managed by an employer and will not let me install</td><td>Tell your instructor before class. A prepared environment can be used instead.</td></tr>
+  </table>
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s4" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 5 TERMINAL ================= -->
+<section class="card" id="s5">
+  <h2><span class="num">5.</span> The terminal</h2>
+  <p class="small muted">VS Code has a terminal built in, so you already met one in Section 4. This section explains what it is and what to type in it.</p>
   <h3>What is a terminal?</h3>
   <p>Most of the time you use your computer by clicking: you open a folder, double-click a file, press a button. A <strong>terminal</strong> is another way. It is a plain text window where you <strong>type instructions</strong> and the computer answers in text.</p>
   <p>Why use it? Because many developer tools, including Python, are built to be used this way. Typing a command is quick, exact and repeatable. A command you type today works the same way tomorrow, and you can share it with a colleague.</p>
@@ -387,12 +557,12 @@ sudo apt install python3 python3-venv python3-pip</pre></div>
       <button role="tab" aria-selected="true" data-tab="win">Windows</button>
       <button role="tab" aria-selected="false" data-tab="mac">Mac</button>
       <button role="tab" aria-selected="false" data-tab="lin">Linux</button>
-      <button role="tab" aria-selected="false" data-tab="vsc">Inside VS Code</button>
+      <button role="tab" aria-selected="false" data-tab="vsc">Inside VS Code (we use this one)</button>
     </div>
     <div class="tabpanel active" data-panel="win"><p>Press the <strong>Windows key</strong>, type <strong>PowerShell</strong> (or <strong>Terminal</strong> on Windows 11), and press Enter.</p></div>
     <div class="tabpanel" data-panel="mac"><p>Press <strong>Command + Space</strong>, type <strong>Terminal</strong>, and press Enter. Or open Finder, then Applications, then Utilities, then Terminal.</p></div>
     <div class="tabpanel" data-panel="lin"><p>Press <strong>Ctrl + Alt + T</strong> on most systems. Or open the applications menu and search for <strong>Terminal</strong>.</p></div>
-    <div class="tabpanel" data-panel="vsc"><p>In VS Code, choose <strong>Terminal</strong> from the menu, then <strong>New Terminal</strong>. It opens already inside your project folder, which is very convenient. VS Code download: <span class="placeholder"><a href="https://code.visualstudio.com/download" style="text-decoration: none; color: inherit;">code.visualstudio.com/download</a></span></p></div>
+    <div class="tabpanel" data-panel="vsc"><p>In VS Code, choose <strong>Terminal</strong> from the menu, then <strong>New Terminal</strong>. The shortcut is <strong>Ctrl + `</strong> (the key under Esc). It opens already inside your project folder, which is why we use it in class. Set up VS Code in Section 4.</p></div>
   </div>
 
   <h3>Four commands to know</h3>
@@ -422,19 +592,19 @@ sudo apt install python3 python3-venv python3-pip</pre></div>
   </div>
   <div class="panel" style="margin:10px 0"><h4>Your folders, live</h4><div class="fstree" id="fsTree" aria-label="Folder map that updates as you type commands"></div><p class="small muted" style="margin:6px 0 0">This map updates as you use <code>cd</code>, <code>mkdir</code>, <code>touch</code> and <code>rm</code>. The highlighted folder is your current folder.</p></div>
   <div class="btnrow"><button class="btn ghost" id="termReset">Reset practice terminal</button></div>
-  <div class="donebar"><button class="donebtn" data-done="s4" aria-pressed="false">Mark as done</button></div>
+  <div class="donebar"><button class="donebtn" data-done="s5" aria-pressed="false">Mark as done</button></div>
 </section>
 
-<!-- ================= 5 FILES AND REPL ================= -->
-<section class="card" id="s5">
-  <h2><span class="num">5.</span> Two ways to run Python: a file, and the REPL</h2>
+<!-- ================= 6 FILES AND REPL ================= -->
+<section class="card" id="s6">
+  <h2><span class="num">6.</span> Two ways to run Python: a file, and the REPL</h2>
   <p>You can give Python instructions in two different ways. You will use both in this course.</p>
 
   <h3>Way 1: a Python file (a script)</h3>
   <p>A Python file is a text file whose name ends in <code>.py</code>. You write several instructions in it, save it, and ask Python to run the whole file from top to bottom. Here is the smallest useful one. It has two lines, and the first starts with <code>#</code>, which makes it a comment that Python ignores.</p>
   <div class="codeblock"><div class="label">hello.py</div><button class="copy">Copy</button><pre># My first Python file
 print("Meridian case batch received")</pre></div>
-  <p>To run it, open a terminal in the folder that contains the file and type:</p>
+  <p>To run it, open a terminal in the folder that contains the file and type. In VS Code, that is <strong>Terminal, then New Terminal</strong>, as you did in Section 4. Remember to <strong>save the file first</strong>.</p>
   <div class="codeblock"><button class="copy">Copy</button><pre>python hello.py
 
 # Output:
@@ -489,12 +659,12 @@ print("Meridian case batch received")</pre></div>
     <button class="btn" id="replFill">Type it for me</button>
     <button class="btn ghost" id="replReset">Start over</button>
   </div>
-  <div class="donebar"><button class="donebtn" data-done="s5" aria-pressed="false">Mark as done</button></div>
+  <div class="donebar"><button class="donebtn" data-done="s6" aria-pressed="false">Mark as done</button></div>
 </section>
 
-<!-- ================= 6 BASICS ================= -->
-<section class="card" id="s6">
-  <h2><span class="num">6.</span> Python basics: the shapes you will see</h2>
+<!-- ================= 7 BASICS ================= -->
+<section class="card" id="s7">
+  <h2><span class="num">7.</span> Python basics: the shapes you will see</h2>
   <p>Here is a light tour of what Python code looks like. Remember, you are not learning to write it yet. You are learning to <em>recognise</em> it. Class 1 teaches how to use each of these step by step.</p>
 
   <h3>6.1 Indentation matters</h3>
@@ -591,29 +761,32 @@ len(closed)                 # 2  (the repeat disappeared)
 
   <h3>Quick check: which structure?</h3>
   <div class="quiz" id="structQuiz"></div>
-  <div class="donebar"><button class="donebtn" data-done="s6" aria-pressed="false">Mark as done</button></div>
+  <div class="donebar"><button class="donebtn" data-done="s7" aria-pressed="false">Mark as done</button></div>
 </section>
 
-<!-- ================= 7 CHECK ================= -->
-<section class="card" id="s7">
-  <h2><span class="num">7.</span> Check yourself</h2>
-  <p>Seven quick questions. They are not graded. They simply show you what to look at again. You can retry as often as you like.</p>
+<!-- ================= 8 CHECK ================= -->
+<section class="card" id="s8">
+  <h2><span class="num">8.</span> Check yourself</h2>
+  <p>Eight quick questions. They are not graded. They simply show you what to look at again. You can retry as often as you like.</p>
   <div class="quiz" id="finalQuiz"></div>
   <div class="score" id="finalScore"></div>
 
   <h3>Before Class 1: your checklist</h3>
   <ul class="tasks" id="finalChecks">
     <li data-check="1"><span class="ck"></span>Python is installed, and the version command shows a number starting with 3</li>
-    <li data-check="2"><span class="ck"></span>I can open a terminal</li>
-    <li data-check="3"><span class="ck"></span>I can run <code>python hello.py</code> or know who to ask if it fails</li>
-    <li data-check="4"><span class="ck"></span>I can start the REPL and leave it with <code>exit()</code></li>
+    <li data-check="2"><span class="ck"></span>VS Code is installed, and the Python extension (publisher: Microsoft) is installed in it</li>
+    <li data-check="3"><span class="ck"></span>I opened my <code>meridian_course</code> folder in VS Code and created <code>hello.py</code></li>
+    <li data-check="4"><span class="ck"></span>I can open a terminal, inside VS Code or on its own</li>
+    <li data-check="5"><span class="ck"></span>I can run <code>python hello.py</code> from VS Code's terminal, or I know who to ask if it fails</li>
+    <li data-check="6"><span class="ck"></span>I can start the REPL and leave it with <code>exit()</code></li>
+    <li data-check="7"><span class="ck"></span>I know to save the file (no dot on the tab) before I run it</li>
   </ul>
   <p class="small muted">Click an item to tick it.</p>
 
   <div class="callout ok"><strong class="t">What happens next</strong>
     In Class 1 you will use Python on Meridian's support-case data. You will meet variables, decisions, loops, functions and files one small step at a time. This page was only your first look. Send your instructor a note if any step above did not work, or if anything felt unclear.
   </div>
-  <div class="donebar"><button class="donebtn" data-done="s7" aria-pressed="false">Mark as done</button></div>
+  <div class="donebar"><button class="donebtn" data-done="s8" aria-pressed="false">Mark as done</button></div>
 </section>
 
 <footer>FDE Module 2 &middot; Class 1 pre-read</footer>
@@ -640,7 +813,7 @@ len(closed)                 # 2  (the repeat disappeared)
   try {
     var plat = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '').toLowerCase();
     var os = plat.indexOf('win') > -1 ? 'win' : (plat.indexOf('mac') > -1 ? 'mac' : (plat.indexOf('linux') > -1 || plat.indexOf('x11') > -1 ? 'lin' : ''));
-    if (os) { ['install', 'openterm'].forEach(function (k) { var b = $('[data-tabs="' + k + '"]'); if (b && b._show) b._show(os); }); }
+    if (os) { ['install', 'vsinstall', 'openterm'].forEach(function (k) { var b = $('[data-tabs="' + k + '"]'); if (b && b._show) b._show(os); }); }
   } catch (e) { /* ignore */ }
 
   /* ---------- copy buttons ---------- */
@@ -662,12 +835,20 @@ len(closed)                 # 2  (the repeat disappeared)
     });
   });
 
+  /* wrap checklist text so long commands wrap on small screens */
+  $$('.tasks li').forEach(function (li) {
+    var ck = $('.ck', li); if (!ck || $('.tx', li)) return;
+    var tx = document.createElement('span'); tx.className = 'tx';
+    while (ck.nextSibling) tx.appendChild(ck.nextSibling);
+    li.appendChild(tx);
+  });
+
   /* ---------- progress ---------- */
   var done = {};
   try { done = JSON.parse(localStorage.getItem('c1preread') || '{}') || {}; } catch (e) { done = {}; }
   function save() { try { localStorage.setItem('c1preread', JSON.stringify(done)); } catch (e) { /* ignore */ } }
   function refresh() {
-    var ids = ['s1', 's2', 's3', 's4', 's5', 's6', 's7'], n = 0;
+    var ids = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'], n = 0;
     ids.forEach(function (id) {
       var on = !!done[id]; if (on) n++;
       $$('[data-done="' + id + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.textContent = on ? 'Done \u2713' : 'Mark as done'; });
@@ -1254,14 +1435,36 @@ len(closed)                 # 2  (the repeat disappeared)
     { q: 'You want a pair of ids that must never be changed after you create it.', o: ['Tuple', 'List', 'Set', 'Dictionary'], a: 0, e: 'A tuple is fixed once it is created.' }
   ]);
   quiz($('#finalQuiz'), [
-    { q: 'What does REPL stand for?', o: ['Run, Edit, Print, Leave', 'Read, Eval, Print, Loop', 'Repeat, Execute, Print, Log', 'Read, Edit, Process, Loop'], a: 1, e: 'Python reads a line, evaluates it, prints the result, and loops back to wait for the next line.' },
-    { q: 'You type python on its own (no file name) and press Enter. What do you see?', o: ['A new prompt that looks like >>>', 'The terminal closes', 'A list of your files', 'Nothing happens'], a: 0, e: 'The >>> prompt means you are in the REPL and Python is listening.' },
+    { q: 'In VS Code, where do you type your code, and where does the output of a run appear?', o: ['Code in the Explorer, output in the status bar', 'Code in the terminal, output in the editor', 'Code in the editor, output in the terminal', 'Code in the status bar, output in the Explorer'], a: 2, e: 'You write in the editor, save, then run the file in the terminal at the bottom, where the output appears. The Explorer lists your files.' },
+    { q: 'In a terminal, what does cd .. do?', o: ['Lists the files here', 'Starts a new Python file', 'Deletes the current folder', 'Moves up one folder'], a: 3, e: 'Two dots mean the parent folder, so cd .. moves up one level.' },
+    { q: 'You type python on its own (no file name) and press Enter. What do you see?', o: ['The terminal window closes at once', 'A new prompt that looks like >>>', 'A list of the files in your folder', 'Python shows nothing and exits'], a: 1, e: 'The >>> prompt means you are in the REPL and Python is listening.' },
+    { q: 'What does REPL stand for?', o: ['Read, Eval, Print, Loop', 'Run, Edit, Print, Leave', 'Repeat, Execute, Print, Log', 'Read, Edit, Process, Loop'], a: 0, e: 'Python reads a line, evaluates it, prints the result, and loops back to wait for the next line.' },
+    { q: 'You are at the terminal prompt and type 2 + 3. What is most likely to happen?', o: ['It prints the answer, 5, on screen', 'It opens the Python REPL for you', 'An error, since it is Python code', 'It saves a file named after the sum'], a: 2, e: 'Python code belongs at the >>> prompt. The terminal prompt expects terminal commands.' },
     { q: 'In Python you must declare a variable\u2019s type before you use it.', o: ['True', 'False'], a: 1, e: 'Python works out the type from the value. You just write x = 5.' },
     { q: 'How does Python know which lines belong inside a block, like under an if?', o: ['Curly braces', 'Semicolons', 'Indentation', 'Capital letters'], a: 2, e: 'Indentation is part of Python\u2019s grammar. Four spaces is the standard.' },
-    { q: 'Which structure stores key: value pairs?', o: ['List', 'Tuple', 'Set', 'Dictionary'], a: 3, e: 'A dictionary reads values by key. Cases in this course are dictionaries.' },
-    { q: 'In a terminal, what does cd .. do?', o: ['Deletes the current folder', 'Moves up one folder', 'Lists the files', 'Starts Python'], a: 1, e: 'Two dots mean the parent folder, so cd .. moves up one level.' },
-    { q: 'You are at the terminal prompt and type 2 + 3. What is most likely to happen?', o: ['It prints 5', 'You get an error, because that is Python code and not a terminal command', 'It starts Python', 'It saves a file'], a: 1, e: 'Python code belongs at the >>> prompt. The terminal prompt expects terminal commands.' }
+    { q: 'Which structure stores key: value pairs?', o: ['Dictionary', 'List', 'Tuple', 'Set'], a: 0, e: 'A dictionary reads values by key. Cases in this course are dictionaries.' }
   ], $('#finalScore'));
+
+
+  /* ---------- VS Code window map ---------- */
+  var VSP = {
+    act: ['Activity bar', 'The narrow strip of icons on the far left. Each icon switches what the panel next to it shows. You need two: <strong>Explorer</strong> (two pages) and <strong>Extensions</strong> (four squares).'],
+    exp: ['Explorer', 'Your project’s folders and files, like a file manager inside the window. Click a file to open it. Use the <strong>New File</strong> icon to make one. This is where you will see <code>data</code> and later <code>outputs</code> appear.'],
+    edit: ['Editor', 'Where you type your code. A <strong>dot on the file’s tab</strong> means it has changes you have not saved. Save with <strong>Ctrl + S</strong> (Command + S on a Mac).'],
+    term: ['Terminal', 'The same terminal you meet in Section 5, built into VS Code. It opens already inside your project folder. You type <code>python hello.py</code> here, and the output appears here too.'],
+    status: ['Status bar', 'The strip at the very bottom. With a Python file open, the right side shows <strong>which Python version</strong> is being used. If it says <em>Select Interpreter</em>, click it and pick Python 3.12 or newer.']
+  };
+  $$('#vsMap .vp').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#vsMap .vp').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      var d = VSP[b.dataset.p]; $('#vsOut').innerHTML = '<strong>' + d[0] + '</strong><br>' + d[1];
+    });
+  });
+  $$('#vsChecks li').forEach(function (li) {
+    li.style.cursor = 'pointer';
+    li.addEventListener('click', function () { var on = li.classList.toggle('done'); $('.ck', li).textContent = on ? '✓' : ''; });
+  });
 
   /* ---------- final checklist ---------- */
   $$('#finalChecks li').forEach(function (li) {
